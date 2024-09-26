@@ -1,0 +1,28 @@
+[2.316s] Invoking command in '/home/nachiketa/dup_auto_ass1/src/bi_agent_package': CONDA_PROMPT_MODIFIER=(iron) PYTHONPATH=/home/nachiketa/dup_auto_ass1/build/bi_agent_package/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/nachiketa/dup_auto_ass1/install/bi_agent_package/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../build/bi_agent_package build --build-base /home/nachiketa/dup_auto_ass1/build/bi_agent_package/build install --record /home/nachiketa/dup_auto_ass1/build/bi_agent_package/install.log --single-version-externally-managed install_data
+[2.704s] /home/nachiketa/miniconda3/envs/iron/lib/python3.10/site-packages/setuptools/_distutils/dist.py:268: UserWarning: Unknown distribution option: 'tests_require'
+[2.704s]   warnings.warn(msg)
+[2.956s] running egg_info
+[3.005s] writing ../../build/bi_agent_package/bi_agent_package.egg-info/PKG-INFO
+[3.006s] writing dependency_links to ../../build/bi_agent_package/bi_agent_package.egg-info/dependency_links.txt
+[3.007s] writing entry points to ../../build/bi_agent_package/bi_agent_package.egg-info/entry_points.txt
+[3.008s] writing requirements to ../../build/bi_agent_package/bi_agent_package.egg-info/requires.txt
+[3.008s] writing top-level names to ../../build/bi_agent_package/bi_agent_package.egg-info/top_level.txt
+[3.128s] reading manifest file '../../build/bi_agent_package/bi_agent_package.egg-info/SOURCES.txt'
+[3.130s] writing manifest file '../../build/bi_agent_package/bi_agent_package.egg-info/SOURCES.txt'
+[3.130s] running build
+[3.130s] running build_py
+[3.131s] copying bi_agent_package/bi_agent.py -> /home/nachiketa/dup_auto_ass1/build/bi_agent_package/build/lib/bi_agent_package
+[3.131s] copying bi_agent_package/__init__.py -> /home/nachiketa/dup_auto_ass1/build/bi_agent_package/build/lib/bi_agent_package
+[3.132s] copying bi_agent_package/bi_agent_node.py -> /home/nachiketa/dup_auto_ass1/build/bi_agent_package/build/lib/bi_agent_package
+[3.132s] running install
+[3.144s] running install_lib
+[3.185s] running install_data
+[3.185s] copying resource/bi_agent_package -> /home/nachiketa/dup_auto_ass1/install/bi_agent_package/share/ament_index/resource_index/packages
+[3.186s] copying package.xml -> /home/nachiketa/dup_auto_ass1/install/bi_agent_package/share/bi_agent_package
+[3.186s] running install_egg_info
+[3.227s] removing '/home/nachiketa/dup_auto_ass1/install/bi_agent_package/lib/python3.10/site-packages/bi_agent_package-0.0.0-py3.10.egg-info' (and everything under it)
+[3.228s] Copying ../../build/bi_agent_package/bi_agent_package.egg-info to /home/nachiketa/dup_auto_ass1/install/bi_agent_package/lib/python3.10/site-packages/bi_agent_package-0.0.0-py3.10.egg-info
+[3.230s] running install_scripts
+[3.574s] Installing bi_agent_node script to /home/nachiketa/dup_auto_ass1/install/bi_agent_package/lib/bi_agent_package
+[3.575s] writing list of installed files to '/home/nachiketa/dup_auto_ass1/build/bi_agent_package/install.log'
+[3.625s] Invoked command in '/home/nachiketa/dup_auto_ass1/src/bi_agent_package' returned '0': CONDA_PROMPT_MODIFIER=(iron) PYTHONPATH=/home/nachiketa/dup_auto_ass1/build/bi_agent_package/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/nachiketa/dup_auto_ass1/install/bi_agent_package/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../build/bi_agent_package build --build-base /home/nachiketa/dup_auto_ass1/build/bi_agent_package/build install --record /home/nachiketa/dup_auto_ass1/build/bi_agent_package/install.log --single-version-externally-managed install_data

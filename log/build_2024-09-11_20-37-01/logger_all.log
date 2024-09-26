@@ -1,0 +1,162 @@
+[0.378s] [34mcolcon[0m [1;30mDEBUG[0m [32mCommand line arguments: ['/usr/bin/colcon', 'build', '--packages-select', 'ci_agent_package'][0m
+[0.379s] [34mcolcon[0m [1;30mDEBUG[0m [32mParsed command line arguments: Namespace(log_base=None, log_level=None, verb_name='build', build_base='build', install_base='install', merge_install=False, symlink_install=False, test_result_base=None, continue_on_error=False, executor='parallel', parallel_workers=4, event_handlers=None, ignore_user_meta=False, metas=['./colcon.meta'], base_paths=['.'], packages_ignore=None, packages_ignore_regex=None, paths=None, packages_up_to=None, packages_up_to_regex=None, packages_above=None, packages_above_and_dependencies=None, packages_above_depth=None, packages_select_by_dep=None, packages_skip_by_dep=None, packages_skip_up_to=None, packages_select_build_failed=False, packages_skip_build_finished=False, packages_select_test_failures=False, packages_skip_test_passed=False, packages_select=['ci_agent_package'], packages_skip=None, packages_select_regex=None, packages_skip_regex=None, packages_start=None, packages_end=None, allow_overriding=[], cmake_args=None, cmake_target=None, cmake_target_skip_unavailable=False, cmake_clean_cache=False, cmake_clean_first=False, cmake_force_configure=False, ament_cmake_args=None, catkin_cmake_args=None, catkin_skip_building_tests=False, verb_parser=<colcon_defaults.argument_parser.defaults.DefaultArgumentsDecorator object at 0x7f0d825e7cd0>, verb_extension=<colcon_core.verb.build.BuildVerb object at 0x7f0d82734940>, main=<bound method BuildVerb.main of <colcon_core.verb.build.BuildVerb object at 0x7f0d82734940>>)[0m
+[0.462s] [34mcolcon.colcon_core.package_discovery[0m [1;30mLevel 1[0m discover_packages(colcon_meta) check parameters
+[0.462s] [34mcolcon.colcon_core.package_discovery[0m [1;30mLevel 1[0m discover_packages(recursive) check parameters
+[0.462s] [34mcolcon.colcon_core.package_discovery[0m [1;30mLevel 1[0m discover_packages(ignore) check parameters
+[0.462s] [34mcolcon.colcon_core.package_discovery[0m [1;30mLevel 1[0m discover_packages(path) check parameters
+[0.462s] [34mcolcon.colcon_core.package_discovery[0m [1;30mLevel 1[0m discover_packages(colcon_meta) discover
+[0.463s] [34mcolcon.colcon_core.package_discovery[0m [1;30mLevel 1[0m discover_packages(recursive) discover
+[0.463s] [34mcolcon.colcon_core.package_discovery[0m [1;30mINFO[0m Crawling recursively for packages in '/home/nachiketa/dup_auto_ass1'
+[0.463s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(.) by extensions ['ignore', 'ignore_ament_install']
+[0.463s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(.) by extension 'ignore'
+[0.463s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(.) by extension 'ignore_ament_install'
+[0.463s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(.) by extensions ['colcon_pkg']
+[0.463s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(.) by extension 'colcon_pkg'
+[0.463s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(.) by extensions ['colcon_meta']
+[0.463s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(.) by extension 'colcon_meta'
+[0.464s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(.) by extensions ['ros']
+[0.464s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(.) by extension 'ros'
+[0.488s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(.) by extensions ['cmake', 'python']
+[0.488s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(.) by extension 'cmake'
+[0.488s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(.) by extension 'python'
+[0.488s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(.) by extensions ['python_setup_py']
+[0.488s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(.) by extension 'python_setup_py'
+[0.488s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(build) by extensions ['ignore', 'ignore_ament_install']
+[0.488s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(build) by extension 'ignore'
+[0.489s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(build) ignored
+[0.489s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(install) by extensions ['ignore', 'ignore_ament_install']
+[0.489s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(install) by extension 'ignore'
+[0.489s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(install) ignored
+[0.489s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(log) by extensions ['ignore', 'ignore_ament_install']
+[0.489s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(log) by extension 'ignore'
+[0.489s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(log) ignored
+[0.490s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(src) by extensions ['ignore', 'ignore_ament_install']
+[0.490s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(src) by extension 'ignore'
+[0.490s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(src) by extension 'ignore_ament_install'
+[0.490s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(src) by extensions ['colcon_pkg']
+[0.490s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(src) by extension 'colcon_pkg'
+[0.490s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(src) by extensions ['colcon_meta']
+[0.490s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(src) by extension 'colcon_meta'
+[0.490s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(src) by extensions ['ros']
+[0.490s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(src) by extension 'ros'
+[0.490s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(src) by extensions ['cmake', 'python']
+[0.490s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(src) by extension 'cmake'
+[0.490s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(src) by extension 'python'
+[0.490s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(src) by extensions ['python_setup_py']
+[0.491s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(src) by extension 'python_setup_py'
+[0.491s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(src/bi_agent_package) by extensions ['ignore', 'ignore_ament_install']
+[0.491s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(src/bi_agent_package) by extension 'ignore'
+[0.492s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(src/bi_agent_package) by extension 'ignore_ament_install'
+[0.492s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(src/bi_agent_package) by extensions ['colcon_pkg']
+[0.492s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(src/bi_agent_package) by extension 'colcon_pkg'
+[0.492s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(src/bi_agent_package) by extensions ['colcon_meta']
+[0.492s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(src/bi_agent_package) by extension 'colcon_meta'
+[0.493s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(src/bi_agent_package) by extensions ['ros']
+[0.493s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(src/bi_agent_package) by extension 'ros'
+[0.498s] [34mcolcon.colcon_core.package_identification[0m [1;30mDEBUG[0m [32mPackage 'src/bi_agent_package' with type 'ros.ament_python' and name 'bi_agent_package'[0m
+[0.498s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(src/ci_agent_package) by extensions ['ignore', 'ignore_ament_install']
+[0.498s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(src/ci_agent_package) by extension 'ignore'
+[0.498s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(src/ci_agent_package) by extension 'ignore_ament_install'
+[0.498s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(src/ci_agent_package) by extensions ['colcon_pkg']
+[0.498s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(src/ci_agent_package) by extension 'colcon_pkg'
+[0.498s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(src/ci_agent_package) by extensions ['colcon_meta']
+[0.499s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(src/ci_agent_package) by extension 'colcon_meta'
+[0.499s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(src/ci_agent_package) by extensions ['ros']
+[0.499s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(src/ci_agent_package) by extension 'ros'
+[0.500s] [34mcolcon.colcon_core.package_identification[0m [1;30mDEBUG[0m [32mPackage 'src/ci_agent_package' with type 'ros.ament_python' and name 'ci_agent_package'[0m
+[0.500s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(src/common_interfaces) by extensions ['ignore', 'ignore_ament_install']
+[0.500s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(src/common_interfaces) by extension 'ignore'
+[0.500s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(src/common_interfaces) by extension 'ignore_ament_install'
+[0.501s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(src/common_interfaces) by extensions ['colcon_pkg']
+[0.501s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(src/common_interfaces) by extension 'colcon_pkg'
+[0.501s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(src/common_interfaces) by extensions ['colcon_meta']
+[0.501s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(src/common_interfaces) by extension 'colcon_meta'
+[0.501s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(src/common_interfaces) by extensions ['ros']
+[0.501s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(src/common_interfaces) by extension 'ros'
+[0.502s] [34mcolcon.colcon_core.package_identification[0m [1;30mDEBUG[0m [32mPackage 'src/common_interfaces' with type 'ros.ament_cmake' and name 'common_interfaces'[0m
+[0.502s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(src/visitor_agent_package) by extensions ['ignore', 'ignore_ament_install']
+[0.502s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(src/visitor_agent_package) by extension 'ignore'
+[0.502s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(src/visitor_agent_package) by extension 'ignore_ament_install'
+[0.502s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(src/visitor_agent_package) by extensions ['colcon_pkg']
+[0.503s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(src/visitor_agent_package) by extension 'colcon_pkg'
+[0.503s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(src/visitor_agent_package) by extensions ['colcon_meta']
+[0.503s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(src/visitor_agent_package) by extension 'colcon_meta'
+[0.503s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(src/visitor_agent_package) by extensions ['ros']
+[0.503s] [34mcolcon.colcon_core.package_identification[0m [1;30mLevel 1[0m _identify(src/visitor_agent_package) by extension 'ros'
+[0.504s] [34mcolcon.colcon_core.package_identification[0m [1;30mDEBUG[0m [32mPackage 'src/visitor_agent_package' with type 'ros.ament_python' and name 'visitor_agent_package'[0m
+[0.504s] [34mcolcon.colcon_core.package_discovery[0m [1;30mLevel 1[0m discover_packages(recursive) using defaults
+[0.504s] [34mcolcon.colcon_core.package_discovery[0m [1;30mLevel 1[0m discover_packages(ignore) discover
+[0.504s] [34mcolcon.colcon_core.package_discovery[0m [1;30mLevel 1[0m discover_packages(ignore) using defaults
+[0.504s] [34mcolcon.colcon_core.package_discovery[0m [1;30mLevel 1[0m discover_packages(path) discover
+[0.504s] [34mcolcon.colcon_core.package_discovery[0m [1;30mLevel 1[0m discover_packages(path) using defaults
+[0.534s] [34mcolcon.colcon_core.package_selection[0m [1;30mINFO[0m Skipping not selected package 'bi_agent_package' in 'src/bi_agent_package'
+[0.534s] [34mcolcon.colcon_core.package_selection[0m [1;30mINFO[0m Skipping not selected package 'common_interfaces' in 'src/common_interfaces'
+[0.534s] [34mcolcon.colcon_core.package_selection[0m [1;30mINFO[0m Skipping not selected package 'visitor_agent_package' in 'src/visitor_agent_package'
+[0.534s] [34mcolcon.colcon_core.package_discovery[0m [1;30mLevel 1[0m discover_packages(prefix_path) check parameters
+[0.535s] [34mcolcon.colcon_core.package_discovery[0m [1;30mLevel 1[0m discover_packages(prefix_path) discover
+[0.537s] [34mcolcon.colcon_installed_package_information.package_discovery[0m [1;30mDEBUG[0m [32mFound 1 installed packages in /home/nachiketa/dup_auto_ass1/install[0m
+[0.539s] [34mcolcon.colcon_installed_package_information.package_discovery[0m [1;30mDEBUG[0m [32mFound 281 installed packages in /opt/ros/iron[0m
+[0.542s] [34mcolcon.colcon_core.package_discovery[0m [1;30mLevel 1[0m discover_packages(prefix_path) using defaults
+[0.614s] [34mcolcon.colcon_core.verb[0m [1;30mLevel 5[0m set package 'ci_agent_package' build argument 'cmake_args' from command line to 'None'
+[0.614s] [34mcolcon.colcon_core.verb[0m [1;30mLevel 5[0m set package 'ci_agent_package' build argument 'cmake_target' from command line to 'None'
+[0.614s] [34mcolcon.colcon_core.verb[0m [1;30mLevel 5[0m set package 'ci_agent_package' build argument 'cmake_target_skip_unavailable' from command line to 'False'
+[0.614s] [34mcolcon.colcon_core.verb[0m [1;30mLevel 5[0m set package 'ci_agent_package' build argument 'cmake_clean_cache' from command line to 'False'
+[0.614s] [34mcolcon.colcon_core.verb[0m [1;30mLevel 5[0m set package 'ci_agent_package' build argument 'cmake_clean_first' from command line to 'False'
+[0.614s] [34mcolcon.colcon_core.verb[0m [1;30mLevel 5[0m set package 'ci_agent_package' build argument 'cmake_force_configure' from command line to 'False'
+[0.614s] [34mcolcon.colcon_core.verb[0m [1;30mLevel 5[0m set package 'ci_agent_package' build argument 'ament_cmake_args' from command line to 'None'
+[0.614s] [34mcolcon.colcon_core.verb[0m [1;30mLevel 5[0m set package 'ci_agent_package' build argument 'catkin_cmake_args' from command line to 'None'
+[0.614s] [34mcolcon.colcon_core.verb[0m [1;30mLevel 5[0m set package 'ci_agent_package' build argument 'catkin_skip_building_tests' from command line to 'False'
+[0.614s] [34mcolcon.colcon_core.verb[0m [1;30mDEBUG[0m [32mBuilding package 'ci_agent_package' with the following arguments: {'ament_cmake_args': None, 'build_base': '/home/nachiketa/dup_auto_ass1/build/ci_agent_package', 'catkin_cmake_args': None, 'catkin_skip_building_tests': False, 'cmake_args': None, 'cmake_clean_cache': False, 'cmake_clean_first': False, 'cmake_force_configure': False, 'cmake_target': None, 'cmake_target_skip_unavailable': False, 'install_base': '/home/nachiketa/dup_auto_ass1/install/ci_agent_package', 'merge_install': False, 'path': '/home/nachiketa/dup_auto_ass1/src/ci_agent_package', 'symlink_install': False, 'test_result_base': None}[0m
+[0.615s] [34mcolcon.colcon_core.executor[0m [1;30mINFO[0m Executing jobs using 'parallel' executor
+[0.617s] [34mcolcon.colcon_parallel_executor.executor.parallel[0m [1;30mDEBUG[0m [32mrun_until_complete[0m
+[0.617s] [34mcolcon.colcon_ros.task.ament_python.build[0m [1;30mINFO[0m Building ROS package in '/home/nachiketa/dup_auto_ass1/src/ci_agent_package' with build type 'ament_python'
+[0.618s] [34mcolcon.colcon_core.shell[0m [1;30mLevel 1[0m create_environment_hook('ci_agent_package', 'ament_prefix_path')
+[0.622s] [34mcolcon.colcon_core.plugin_system[0m [1;30mINFO[0m Skipping extension 'colcon_core.shell.bat': Not used on non-Windows systems
+[0.623s] [34mcolcon.colcon_core.shell[0m [1;30mINFO[0m Creating environment hook '/home/nachiketa/dup_auto_ass1/install/ci_agent_package/share/ci_agent_package/hook/ament_prefix_path.ps1'
+[0.624s] [34mcolcon.colcon_core.shell[0m [1;30mINFO[0m Creating environment descriptor '/home/nachiketa/dup_auto_ass1/install/ci_agent_package/share/ci_agent_package/hook/ament_prefix_path.dsv'
+[0.629s] [34mcolcon.colcon_core.shell[0m [1;30mINFO[0m Creating environment hook '/home/nachiketa/dup_auto_ass1/install/ci_agent_package/share/ci_agent_package/hook/ament_prefix_path.sh'
+[0.631s] [34mcolcon.colcon_core.shell[0m [1;30mINFO[0m Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[0.631s] [34mcolcon.colcon_core.shell[0m [1;30mDEBUG[0m [32mSkip shell extension 'dsv' for command environment[0m
+[1.398s] [34mcolcon.colcon_core.task.python.build[0m [1;30mINFO[0m Building Python package in '/home/nachiketa/dup_auto_ass1/src/ci_agent_package'
+[1.399s] [34mcolcon.colcon_core.shell[0m [1;30mINFO[0m Skip shell extension 'powershell' for command environment: Not usable outside of PowerShell
+[1.399s] [34mcolcon.colcon_core.shell[0m [1;30mDEBUG[0m [32mSkip shell extension 'dsv' for command environment[0m
+[2.873s] [34mcolcon.colcon_core.event_handler.log_command[0m [1;30mDEBUG[0m [32mInvoking command in '/home/nachiketa/dup_auto_ass1/src/ci_agent_package': CONDA_PROMPT_MODIFIER=(iron) PYTHONPATH=/home/nachiketa/dup_auto_ass1/build/ci_agent_package/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/nachiketa/dup_auto_ass1/install/ci_agent_package/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../build/ci_agent_package build --build-base /home/nachiketa/dup_auto_ass1/build/ci_agent_package/build install --record /home/nachiketa/dup_auto_ass1/build/ci_agent_package/install.log --single-version-externally-managed install_data[0m
+[4.943s] [34mcolcon.colcon_core.event_handler.log_command[0m [1;30mDEBUG[0m [32mInvoked command in '/home/nachiketa/dup_auto_ass1/src/ci_agent_package' returned '0': CONDA_PROMPT_MODIFIER=(iron) PYTHONPATH=/home/nachiketa/dup_auto_ass1/build/ci_agent_package/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/nachiketa/dup_auto_ass1/install/ci_agent_package/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../build/ci_agent_package build --build-base /home/nachiketa/dup_auto_ass1/build/ci_agent_package/build install --record /home/nachiketa/dup_auto_ass1/build/ci_agent_package/install.log --single-version-externally-managed install_data[0m
+[4.952s] [34mcolcon.colcon_core.environment[0m [1;30mLevel 1[0m checking '/home/nachiketa/dup_auto_ass1/install/ci_agent_package' for CMake module files
+[4.954s] [34mcolcon.colcon_core.environment[0m [1;30mLevel 1[0m checking '/home/nachiketa/dup_auto_ass1/install/ci_agent_package' for CMake config files
+[4.955s] [34mcolcon.colcon_core.environment[0m [1;30mLevel 1[0m checking '/home/nachiketa/dup_auto_ass1/install/ci_agent_package/lib'
+[4.955s] [34mcolcon.colcon_core.environment[0m [1;30mLevel 1[0m checking '/home/nachiketa/dup_auto_ass1/install/ci_agent_package/bin'
+[4.956s] [34mcolcon.colcon_core.environment[0m [1;30mLevel 1[0m checking '/home/nachiketa/dup_auto_ass1/install/ci_agent_package/lib/pkgconfig/ci_agent_package.pc'
+[4.957s] [34mcolcon.colcon_core.environment[0m [1;30mLevel 1[0m checking '/home/nachiketa/dup_auto_ass1/install/ci_agent_package/lib/python3.10/site-packages'
+[4.957s] [34mcolcon.colcon_core.shell[0m [1;30mLevel 1[0m create_environment_hook('ci_agent_package', 'pythonpath')
+[4.957s] [34mcolcon.colcon_core.shell[0m [1;30mINFO[0m Creating environment hook '/home/nachiketa/dup_auto_ass1/install/ci_agent_package/share/ci_agent_package/hook/pythonpath.ps1'
+[4.959s] [34mcolcon.colcon_core.shell[0m [1;30mINFO[0m Creating environment descriptor '/home/nachiketa/dup_auto_ass1/install/ci_agent_package/share/ci_agent_package/hook/pythonpath.dsv'
+[4.960s] [34mcolcon.colcon_core.shell[0m [1;30mINFO[0m Creating environment hook '/home/nachiketa/dup_auto_ass1/install/ci_agent_package/share/ci_agent_package/hook/pythonpath.sh'
+[4.962s] [34mcolcon.colcon_core.environment[0m [1;30mLevel 1[0m checking '/home/nachiketa/dup_auto_ass1/install/ci_agent_package/bin'
+[4.962s] [34mcolcon.colcon_core.environment[0m [1;30mLevel 1[0m create_environment_scripts_only(ci_agent_package)
+[4.963s] [34mcolcon.colcon_core.shell[0m [1;30mINFO[0m Creating package script '/home/nachiketa/dup_auto_ass1/install/ci_agent_package/share/ci_agent_package/package.ps1'
+[4.965s] [34mcolcon.colcon_core.shell[0m [1;30mINFO[0m Creating package descriptor '/home/nachiketa/dup_auto_ass1/install/ci_agent_package/share/ci_agent_package/package.dsv'
+[4.967s] [34mcolcon.colcon_core.shell[0m [1;30mINFO[0m Creating package script '/home/nachiketa/dup_auto_ass1/install/ci_agent_package/share/ci_agent_package/package.sh'
+[4.969s] [34mcolcon.colcon_core.shell[0m [1;30mINFO[0m Creating package script '/home/nachiketa/dup_auto_ass1/install/ci_agent_package/share/ci_agent_package/package.bash'
+[4.973s] [34mcolcon.colcon_core.shell[0m [1;30mINFO[0m Creating package script '/home/nachiketa/dup_auto_ass1/install/ci_agent_package/share/ci_agent_package/package.zsh'
+[4.977s] [34mcolcon.colcon_core.environment[0m [1;30mLevel 1[0m create_file_with_runtime_dependencies(/home/nachiketa/dup_auto_ass1/install/ci_agent_package/share/colcon-core/packages/ci_agent_package)
+[4.979s] [34mcolcon.colcon_parallel_executor.executor.parallel[0m [1;30mDEBUG[0m [32mclosing loop[0m
+[4.981s] [34mcolcon.colcon_parallel_executor.executor.parallel[0m [1;30mDEBUG[0m [32mloop closed[0m
+[4.982s] [34mcolcon.colcon_parallel_executor.executor.parallel[0m [1;30mDEBUG[0m [32mrun_until_complete finished with '0'[0m
+[4.982s] [34mcolcon.colcon_core.event_reactor[0m [1;30mDEBUG[0m [32mjoining thread[0m
+[5.084s] [34mcolcon.colcon_core.plugin_system[0m [1;30mINFO[0m Skipping extension 'colcon_notification.desktop_notification.notify_send': Could not find 'notify-send'
+[5.084s] [34mcolcon.colcon_core.plugin_system[0m [1;30mINFO[0m Skipping extension 'colcon_notification.desktop_notification.terminal_notifier': Not used on non-Darwin systems
+[5.084s] [34mcolcon.colcon_core.plugin_system[0m [1;30mINFO[0m Skipping extension 'colcon_notification.desktop_notification.win32': Not used on non-Windows systems
+[5.085s] [34mcolcon.colcon_notification.desktop_notification[0m [1;30mINFO[0m Sending desktop notification using 'notify2'
+[5.085s] [34mcolcon.colcon_notification.desktop_notification.notify2[0m [1;30mDEBUG[0m [32mFailed to initialize notify2: org.freedesktop.DBus.Error.FileNotFound: Failed to connect to socket /run/user/1000/bus: No such file or directory[0m
+[5.085s] [34mcolcon.colcon_core.event_reactor[0m [1;30mDEBUG[0m [32mjoined thread[0m
+[5.086s] [34mcolcon.colcon_core.shell[0m [1;30mINFO[0m Creating prefix script '/home/nachiketa/dup_auto_ass1/install/local_setup.ps1'
+[5.087s] [34mcolcon.colcon_core.shell[0m [1;30mINFO[0m Creating prefix util module '/home/nachiketa/dup_auto_ass1/install/_local_setup_util_ps1.py'
+[5.090s] [34mcolcon.colcon_core.shell[0m [1;30mINFO[0m Creating prefix chain script '/home/nachiketa/dup_auto_ass1/install/setup.ps1'
+[5.093s] [34mcolcon.colcon_core.shell[0m [1;30mINFO[0m Creating prefix script '/home/nachiketa/dup_auto_ass1/install/local_setup.sh'
+[5.095s] [34mcolcon.colcon_core.shell[0m [1;30mINFO[0m Creating prefix util module '/home/nachiketa/dup_auto_ass1/install/_local_setup_util_sh.py'
+[5.096s] [34mcolcon.colcon_core.shell[0m [1;30mINFO[0m Creating prefix chain script '/home/nachiketa/dup_auto_ass1/install/setup.sh'
+[5.099s] [34mcolcon.colcon_core.shell[0m [1;30mINFO[0m Creating prefix script '/home/nachiketa/dup_auto_ass1/install/local_setup.bash'
+[5.103s] [34mcolcon.colcon_core.shell[0m [1;30mINFO[0m Creating prefix chain script '/home/nachiketa/dup_auto_ass1/install/setup.bash'
+[5.106s] [34mcolcon.colcon_core.shell[0m [1;30mINFO[0m Creating prefix script '/home/nachiketa/dup_auto_ass1/install/local_setup.zsh'
+[5.108s] [34mcolcon.colcon_core.shell[0m [1;30mINFO[0m Creating prefix chain script '/home/nachiketa/dup_auto_ass1/install/setup.zsh'

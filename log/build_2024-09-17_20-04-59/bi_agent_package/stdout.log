@@ -1,0 +1,37 @@
+running egg_info
+creating ../../build/bi_agent_package/bi_agent_package.egg-info
+writing ../../build/bi_agent_package/bi_agent_package.egg-info/PKG-INFO
+writing dependency_links to ../../build/bi_agent_package/bi_agent_package.egg-info/dependency_links.txt
+writing entry points to ../../build/bi_agent_package/bi_agent_package.egg-info/entry_points.txt
+writing requirements to ../../build/bi_agent_package/bi_agent_package.egg-info/requires.txt
+writing top-level names to ../../build/bi_agent_package/bi_agent_package.egg-info/top_level.txt
+writing manifest file '../../build/bi_agent_package/bi_agent_package.egg-info/SOURCES.txt'
+reading manifest file '../../build/bi_agent_package/bi_agent_package.egg-info/SOURCES.txt'
+writing manifest file '../../build/bi_agent_package/bi_agent_package.egg-info/SOURCES.txt'
+running build
+running build_py
+creating /home/nachiketa/dup_auto_ass1/build/bi_agent_package/build
+creating /home/nachiketa/dup_auto_ass1/build/bi_agent_package/build/lib
+creating /home/nachiketa/dup_auto_ass1/build/bi_agent_package/build/lib/bi_agent_package
+copying bi_agent_package/bi_agent.py -> /home/nachiketa/dup_auto_ass1/build/bi_agent_package/build/lib/bi_agent_package
+copying bi_agent_package/__init__.py -> /home/nachiketa/dup_auto_ass1/build/bi_agent_package/build/lib/bi_agent_package
+copying bi_agent_package/bi_agent_node.py -> /home/nachiketa/dup_auto_ass1/build/bi_agent_package/build/lib/bi_agent_package
+running install
+running install_lib
+creating /home/nachiketa/dup_auto_ass1/install/bi_agent_package/lib/python3.10/site-packages/bi_agent_package
+copying /home/nachiketa/dup_auto_ass1/build/bi_agent_package/build/lib/bi_agent_package/bi_agent.py -> /home/nachiketa/dup_auto_ass1/install/bi_agent_package/lib/python3.10/site-packages/bi_agent_package
+copying /home/nachiketa/dup_auto_ass1/build/bi_agent_package/build/lib/bi_agent_package/__init__.py -> /home/nachiketa/dup_auto_ass1/install/bi_agent_package/lib/python3.10/site-packages/bi_agent_package
+copying /home/nachiketa/dup_auto_ass1/build/bi_agent_package/build/lib/bi_agent_package/bi_agent_node.py -> /home/nachiketa/dup_auto_ass1/install/bi_agent_package/lib/python3.10/site-packages/bi_agent_package
+byte-compiling /home/nachiketa/dup_auto_ass1/install/bi_agent_package/lib/python3.10/site-packages/bi_agent_package/bi_agent.py to bi_agent.cpython-310.pyc
+byte-compiling /home/nachiketa/dup_auto_ass1/install/bi_agent_package/lib/python3.10/site-packages/bi_agent_package/__init__.py to __init__.cpython-310.pyc
+byte-compiling /home/nachiketa/dup_auto_ass1/install/bi_agent_package/lib/python3.10/site-packages/bi_agent_package/bi_agent_node.py to bi_agent_node.cpython-310.pyc
+running install_data
+creating /home/nachiketa/dup_auto_ass1/install/bi_agent_package/share/ament_index
+creating /home/nachiketa/dup_auto_ass1/install/bi_agent_package/share/ament_index/resource_index
+creating /home/nachiketa/dup_auto_ass1/install/bi_agent_package/share/ament_index/resource_index/packages
+copying resource/bi_agent_package -> /home/nachiketa/dup_auto_ass1/install/bi_agent_package/share/ament_index/resource_index/packages
+copying package.xml -> /home/nachiketa/dup_auto_ass1/install/bi_agent_package/share/bi_agent_package
+running install_egg_info
+Copying ../../build/bi_agent_package/bi_agent_package.egg-info to /home/nachiketa/dup_auto_ass1/install/bi_agent_package/lib/python3.10/site-packages/bi_agent_package-0.0.0-py3.10.egg-info
+running install_scripts
+writing list of installed files to '/home/nachiketa/dup_auto_ass1/build/bi_agent_package/install.log'

@@ -1,0 +1,30 @@
+[2.478s] Invoking command in '/home/nachiketa/dup_auto_ass1/src/ci_agent_package': CONDA_PROMPT_MODIFIER=(iron) PYTHONPATH=/home/nachiketa/dup_auto_ass1/build/ci_agent_package/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/nachiketa/dup_auto_ass1/install/ci_agent_package/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../build/ci_agent_package build --build-base /home/nachiketa/dup_auto_ass1/build/ci_agent_package/build install --record /home/nachiketa/dup_auto_ass1/build/ci_agent_package/install.log --single-version-externally-managed install_data
+[2.831s] /home/nachiketa/miniconda3/envs/iron/lib/python3.10/site-packages/setuptools/_distutils/dist.py:268: UserWarning: Unknown distribution option: 'tests_require'
+[2.831s]   warnings.warn(msg)
+[3.226s] running egg_info
+[3.267s] writing ../../build/ci_agent_package/ci_agent_package.egg-info/PKG-INFO
+[3.269s] writing dependency_links to ../../build/ci_agent_package/ci_agent_package.egg-info/dependency_links.txt
+[3.269s] writing entry points to ../../build/ci_agent_package/ci_agent_package.egg-info/entry_points.txt
+[3.270s] writing requirements to ../../build/ci_agent_package/ci_agent_package.egg-info/requires.txt
+[3.270s] writing top-level names to ../../build/ci_agent_package/ci_agent_package.egg-info/top_level.txt
+[3.356s] reading manifest file '../../build/ci_agent_package/ci_agent_package.egg-info/SOURCES.txt'
+[3.359s] writing manifest file '../../build/ci_agent_package/ci_agent_package.egg-info/SOURCES.txt'
+[3.359s] running build
+[3.359s] running build_py
+[3.360s] copying ci_agent_package/ci_agent_node.py -> /home/nachiketa/dup_auto_ass1/build/ci_agent_package/build/lib/ci_agent_package
+[3.360s] copying ci_agent_package/__init__.py -> /home/nachiketa/dup_auto_ass1/build/ci_agent_package/build/lib/ci_agent_package
+[3.361s] copying ci_agent_package/ci_agent.py -> /home/nachiketa/dup_auto_ass1/build/ci_agent_package/build/lib/ci_agent_package
+[3.361s] copying ci_agent_package/tasks/__init__.py -> /home/nachiketa/dup_auto_ass1/build/ci_agent_package/build/lib/ci_agent_package/tasks
+[3.362s] copying ci_agent_package/tasks/escort_visitor_task.py -> /home/nachiketa/dup_auto_ass1/build/ci_agent_package/build/lib/ci_agent_package/tasks
+[3.363s] running install
+[3.373s] running install_lib
+[3.416s] running install_data
+[3.416s] copying resource/ci_agent_package -> /home/nachiketa/dup_auto_ass1/install/ci_agent_package/share/ament_index/resource_index/packages
+[3.417s] copying package.xml -> /home/nachiketa/dup_auto_ass1/install/ci_agent_package/share/ci_agent_package
+[3.417s] running install_egg_info
+[3.458s] removing '/home/nachiketa/dup_auto_ass1/install/ci_agent_package/lib/python3.10/site-packages/ci_agent_package-0.0.0-py3.10.egg-info' (and everything under it)
+[3.459s] Copying ../../build/ci_agent_package/ci_agent_package.egg-info to /home/nachiketa/dup_auto_ass1/install/ci_agent_package/lib/python3.10/site-packages/ci_agent_package-0.0.0-py3.10.egg-info
+[3.462s] running install_scripts
+[3.807s] Installing ci_agent_node script to /home/nachiketa/dup_auto_ass1/install/ci_agent_package/lib/ci_agent_package
+[3.809s] writing list of installed files to '/home/nachiketa/dup_auto_ass1/build/ci_agent_package/install.log'
+[3.875s] Invoked command in '/home/nachiketa/dup_auto_ass1/src/ci_agent_package' returned '0': CONDA_PROMPT_MODIFIER=(iron) PYTHONPATH=/home/nachiketa/dup_auto_ass1/build/ci_agent_package/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/nachiketa/dup_auto_ass1/install/ci_agent_package/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../build/ci_agent_package build --build-base /home/nachiketa/dup_auto_ass1/build/ci_agent_package/build install --record /home/nachiketa/dup_auto_ass1/build/ci_agent_package/install.log --single-version-externally-managed install_data
