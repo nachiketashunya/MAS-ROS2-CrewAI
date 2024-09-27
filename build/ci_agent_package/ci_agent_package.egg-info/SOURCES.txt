@@ -14,6 +14,11 @@ ci_agent_package/ci_agent_node.py
 ci_agent_package/tasks/__init__.py
 ci_agent_package/tasks/escort_to_entrance.py
 ci_agent_package/tasks/escort_to_host.py
+ci_agent_package/tools/__init__.py
+ci_agent_package/tools/nav_back_to_entrance_tool.py
+ci_agent_package/tools/nav_to_building_tool.py
+ci_agent_package/tools/nav_to_host_tool.py
+ci_agent_package/tools/req_building_nav_tool.py
 resource/ci_agent_package
 test/test_copyright.py
 test/test_flake8.py

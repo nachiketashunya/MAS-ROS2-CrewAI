@@ -1,0 +1,71 @@
+[0.000000] (-) TimerEvent: {}
+[0.000658] (-) JobUnselected: {'identifier': 'ci_agent_package'}
+[0.000797] (-) JobUnselected: {'identifier': 'common_interfaces'}
+[0.000894] (-) JobUnselected: {'identifier': 'visitor_agent_package'}
+[0.000988] (bi_agent_package) JobQueued: {'identifier': 'bi_agent_package', 'dependencies': OrderedDict()}
+[0.001081] (bi_agent_package) JobStarted: {'identifier': 'bi_agent_package'}
+[0.097652] (-) TimerEvent: {}
+[0.198120] (-) TimerEvent: {}
+[0.298647] (-) TimerEvent: {}
+[0.399420] (-) TimerEvent: {}
+[0.499883] (-) TimerEvent: {}
+[0.600400] (-) TimerEvent: {}
+[0.700841] (-) TimerEvent: {}
+[0.801264] (-) TimerEvent: {}
+[0.901755] (-) TimerEvent: {}
+[1.002171] (-) TimerEvent: {}
+[1.102626] (-) TimerEvent: {}
+[1.203159] (-) TimerEvent: {}
+[1.303643] (-) TimerEvent: {}
+[1.404121] (-) TimerEvent: {}
+[1.504559] (-) TimerEvent: {}
+[1.605054] (-) TimerEvent: {}
+[1.705630] (-) TimerEvent: {}
+[1.806131] (-) TimerEvent: {}
+[1.906566] (-) TimerEvent: {}
+[2.007210] (-) TimerEvent: {}
+[2.028583] (bi_agent_package) Command: {'cmd': ['/usr/bin/python3', '-W', 'ignore:setup.py install is deprecated', 'setup.py', 'egg_info', '--egg-base', '../../build/bi_agent_package', 'build', '--build-base', '/home/nachiketa/dup_auto_ass1/build/bi_agent_package/build', 'install', '--record', '/home/nachiketa/dup_auto_ass1/build/bi_agent_package/install.log', '--single-version-externally-managed', 'install_data'], 'cwd': '/home/nachiketa/dup_auto_ass1/src/bi_agent_package', 'env': {'LESSOPEN': '| /usr/bin/lesspipe %s', 'CONDA_PROMPT_MODIFIER': '(iron)', 'USER': 'nachiketa', 'GIT_ASKPASS': '/home/nachiketa/.vscode-server/bin/38c31bc77e0dd6ae88a4e9cc93428cc27a56ba40/extensions/git/dist/askpass.sh', 'SHLVL': '1', 'LD_LIBRARY_PATH': '/opt/ros/iron/opt/rviz_ogre_vendor/lib:/opt/ros/iron/lib/x86_64-linux-gnu:/opt/ros/iron/lib', 'HOME': '/home/nachiketa', 'CONDA_SHLVL': '2', 'TERM_PROGRAM_VERSION': '1.93.1', 'VSCODE_IPC_HOOK_CLI': '/run/user/1000/vscode-ipc-2c7d5ba9-0e2c-478d-b7d8-43ae3e182087.sock', 'ROS_PYTHON_VERSION': '3', 'VSCODE_GIT_ASKPASS_MAIN': '/home/nachiketa/.vscode-server/bin/38c31bc77e0dd6ae88a4e9cc93428cc27a56ba40/extensions/git/dist/askpass-main.js', 'VSCODE_GIT_ASKPASS_NODE': '/home/nachiketa/.vscode-server/bin/38c31bc77e0dd6ae88a4e9cc93428cc27a56ba40/node', 'DBUS_SESSION_BUS_ADDRESS': 'unix:path=/run/user/1000/bus', 'COLORTERM': 'truecolor', '_CE_M': '', 'WSL_DISTRO_NAME': 'Ubuntu', 'WAYLAND_DISPLAY': 'wayland-0', 'ROS_DISTRO': 'iron', 'LOGNAME': 'nachiketa', 'NAME': 'DESKTOP-CI3L38B', 'WSL_INTEROP': '/run/WSL/419_interop', 'PULSE_SERVER': 'unix:/mnt/wslg/PulseServer', '_': '/usr/bin/colcon', 'ROS_VERSION': '2', 'TERM': 'xterm-256color', '_CE_CONDA': '', 'PATH': '/opt/ros/iron/bin:/home/nachiketa/miniconda3/envs/iron/bin:/home/nachiketa/miniconda3/condabin:/home/nachiketa/.vscode-server/bin/38c31bc77e0dd6ae88a4e9cc93428cc27a56ba40/bin/remote-cli:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/usr/lib/wsl/lib:/mnt/c/Program Files/Microsoft/jdk-17.0.8.7-hotspot/bin:/mnt/c/Program Files/Common Files/Oracle/Java/javapath:/mnt/c/Windows/system32:/mnt/c/Windows:/mnt/c/Windows/System32/Wbem:/mnt/c/Windows/System32/WindowsPowerShell/v1.0:/mnt/c/Windows/System32/OpenSSH:/mnt/c/Program Files/Git/cmd:/mnt/c/Program Files/Geth:/mnt/c/ProgramData/chocolatey/bin:/mnt/c/Program Files/nodejs:/mnt/c/Users/nachi/platform-tools:/mnt/c/Program Files/dotnet:/mnt/c/Program Files (x86)/Intel/Intel(R) Management Engine Components/DAL:/mnt/c/Program Files/Intel/Intel(R) Management Engine Components/DAL:/mnt/c/Program Files/PuTTY:/mnt/c/Program Files/MySQL/MySQL Shell 8.0/bin:/mnt/c/Users/nachi/AppData/Local/Programs/Python/Python311/Scripts:/mnt/c/Users/nachi/AppData/Local/Programs/Python/Python311:/mnt/c/Users/nachi/AppData/Local/Microsoft/WindowsApps:/mnt/c/Users/nachi/AppData/Local/Programs/Microsoft VS Code/bin:/mnt/c/Users/nachi/AppData/Roaming/npm:/mnt/c/Users/nachi/AppData/Local/Android/Sdk/platform-tools:/mnt/c/Users/nachi/miniconda3/Scripts:/mnt/c/Users/nachi/miniconda3/condabin:/mnt/c/ffmpeg/bin', 'XDG_RUNTIME_DIR': '/run/user/1000/', 'DISPLAY': ':0', 'LANG': 'en_US.UTF-8', 'CONDA_PREFIX_1': '/home/nachiketa/miniconda3', 'LS_COLORS': 'rs=0:di=01;34:ln=01;36:mh=00:pi=40;33:so=01;35:do=01;35:bd=40;33;01:cd=40;33;01:or=40;31;01:mi=00:su=37;41:sg=30;43:ca=30;41:tw=30;42:ow=34;42:st=37;44:ex=01;32:*.tar=01;31:*.tgz=01;31:*.arc=01;31:*.arj=01;31:*.taz=01;31:*.lha=01;31:*.lz4=01;31:*.lzh=01;31:*.lzma=01;31:*.tlz=01;31:*.txz=01;31:*.tzo=01;31:*.t7z=01;31:*.zip=01;31:*.z=01;31:*.dz=01;31:*.gz=01;31:*.lrz=01;31:*.lz=01;31:*.lzo=01;31:*.xz=01;31:*.zst=01;31:*.tzst=01;31:*.bz2=01;31:*.bz=01;31:*.tbz=01;31:*.tbz2=01;31:*.tz=01;31:*.deb=01;31:*.rpm=01;31:*.jar=01;31:*.war=01;31:*.ear=01;31:*.sar=01;31:*.rar=01;31:*.alz=01;31:*.ace=01;31:*.zoo=01;31:*.cpio=01;31:*.7z=01;31:*.rz=01;31:*.cab=01;31:*.wim=01;31:*.swm=01;31:*.dwm=01;31:*.esd=01;31:*.jpg=01;35:*.jpeg=01;35:*.mjpg=01;35:*.mjpeg=01;35:*.gif=01;35:*.bmp=01;35:*.pbm=01;35:*.pgm=01;35:*.ppm=01;35:*.tga=01;35:*.xbm=01;35:*.xpm=01;35:*.tif=01;35:*.tiff=01;35:*.png=01;35:*.svg=01;35:*.svgz=01;35:*.mng=01;35:*.pcx=01;35:*.mov=01;35:*.mpg=01;35:*.mpeg=01;35:*.m2v=01;35:*.mkv=01;35:*.webm=01;35:*.webp=01;35:*.ogm=01;35:*.mp4=01;35:*.m4v=01;35:*.mp4v=01;35:*.vob=01;35:*.qt=01;35:*.nuv=01;35:*.wmv=01;35:*.asf=01;35:*.rm=01;35:*.rmvb=01;35:*.flc=01;35:*.avi=01;35:*.fli=01;35:*.flv=01;35:*.gl=01;35:*.dl=01;35:*.xcf=01;35:*.xwd=01;35:*.yuv=01;35:*.cgm=01;35:*.emf=01;35:*.ogv=01;35:*.ogx=01;35:*.aac=00;36:*.au=00;36:*.flac=00;36:*.m4a=00;36:*.mid=00;36:*.midi=00;36:*.mka=00;36:*.mp3=00;36:*.mpc=00;36:*.ogg=00;36:*.ra=00;36:*.wav=00;36:*.oga=00;36:*.opus=00;36:*.spx=00;36:*.xspf=00;36:', 'VSCODE_GIT_IPC_HANDLE': '/run/user/1000/vscode-git-32917bb853.sock', 'TERM_PROGRAM': 'vscode', 'ROS_DOMAIN_ID': '1', 'AMENT_PREFIX_PATH': '/opt/ros/iron', 'CONDA_PYTHON_EXE': '/home/nachiketa/miniconda3/bin/python', 'SHELL': '/bin/bash', 'LESSCLOSE': '/usr/bin/lesspipe %s %s', 'CONDA_DEFAULT_ENV': 'iron', 'ROS_AUTOMATIC_DISCOVERY_RANGE': 'SUBNET', 'VSCODE_GIT_ASKPASS_EXTRA_ARGS': '', 'PWD': '/home/nachiketa/dup_auto_ass1/build/bi_agent_package', 'CONDA_EXE': '/home/nachiketa/miniconda3/bin/conda', 'PYTHONPATH': '/home/nachiketa/dup_auto_ass1/build/bi_agent_package/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/nachiketa/dup_auto_ass1/install/bi_agent_package/lib/python3.10/site-packages:/home/nachiketa/miniconda3/envs/iron/lib/python3.10/site-packages:/home/nachiketa/miniconda3/lib/python3.10/site-packages:/opt/ros/iron/lib/python3.10/site-packages', 'CONDA_PREFIX': '/home/nachiketa/miniconda3/envs/iron', 'COLCON': '1', 'WSL2_GUI_APPS_ENABLED': '1', 'HOSTTYPE': 'x86_64', 'WSLENV': 'VSCODE_WSL_EXT_LOCATION/up'}, 'shell': False}
+[2.107340] (-) TimerEvent: {}
+[2.207826] (-) TimerEvent: {}
+[2.308374] (-) TimerEvent: {}
+[2.320118] (bi_agent_package) StderrLine: {'line': b"/home/nachiketa/miniconda3/envs/iron/lib/python3.10/site-packages/setuptools/_distutils/dist.py:268: UserWarning: Unknown distribution option: 'tests_require'\n"}
+[2.320385] (bi_agent_package) StderrLine: {'line': b'  warnings.warn(msg)\n'}
+[2.408516] (-) TimerEvent: {}
+[2.508944] (-) TimerEvent: {}
+[2.563502] (bi_agent_package) StdoutLine: {'line': b'running egg_info\n'}
+[2.609114] (-) TimerEvent: {}
+[2.612762] (bi_agent_package) StdoutLine: {'line': b'writing ../../build/bi_agent_package/bi_agent_package.egg-info/PKG-INFO\n'}
+[2.613738] (bi_agent_package) StdoutLine: {'line': b'writing dependency_links to ../../build/bi_agent_package/bi_agent_package.egg-info/dependency_links.txt\n'}
+[2.614312] (bi_agent_package) StdoutLine: {'line': b'writing entry points to ../../build/bi_agent_package/bi_agent_package.egg-info/entry_points.txt\n'}
+[2.615111] (bi_agent_package) StdoutLine: {'line': b'writing requirements to ../../build/bi_agent_package/bi_agent_package.egg-info/requires.txt\n'}
+[2.615421] (bi_agent_package) StdoutLine: {'line': b'writing top-level names to ../../build/bi_agent_package/bi_agent_package.egg-info/top_level.txt\n'}
+[2.694889] (bi_agent_package) StdoutLine: {'line': b"reading manifest file '../../build/bi_agent_package/bi_agent_package.egg-info/SOURCES.txt'\n"}
+[2.697486] (bi_agent_package) StdoutLine: {'line': b"writing manifest file '../../build/bi_agent_package/bi_agent_package.egg-info/SOURCES.txt'\n"}
+[2.697878] (bi_agent_package) StdoutLine: {'line': b'running build\n'}
+[2.698377] (bi_agent_package) StdoutLine: {'line': b'running build_py\n'}
+[2.698940] (bi_agent_package) StdoutLine: {'line': b'copying bi_agent_package/bi_agent.py -> /home/nachiketa/dup_auto_ass1/build/bi_agent_package/build/lib/bi_agent_package\n'}
+[2.700187] (bi_agent_package) StdoutLine: {'line': b'copying bi_agent_package/__init__.py -> /home/nachiketa/dup_auto_ass1/build/bi_agent_package/build/lib/bi_agent_package\n'}
+[2.700540] (bi_agent_package) StdoutLine: {'line': b'copying bi_agent_package/bi_agent_node.py -> /home/nachiketa/dup_auto_ass1/build/bi_agent_package/build/lib/bi_agent_package\n'}
+[2.701818] (bi_agent_package) StdoutLine: {'line': b'copying bi_agent_package/tools/__init__.py -> /home/nachiketa/dup_auto_ass1/build/bi_agent_package/build/lib/bi_agent_package/tools\n'}
+[2.702181] (bi_agent_package) StdoutLine: {'line': b'copying bi_agent_package/tools/fetch_nav_tool.py -> /home/nachiketa/dup_auto_ass1/build/bi_agent_package/build/lib/bi_agent_package/tools\n'}
+[2.703563] (bi_agent_package) StdoutLine: {'line': b'copying bi_agent_package/tasks/handle_navigation_task.py -> /home/nachiketa/dup_auto_ass1/build/bi_agent_package/build/lib/bi_agent_package/tasks\n'}
+[2.704734] (bi_agent_package) StdoutLine: {'line': b'copying bi_agent_package/tasks/__init__.py -> /home/nachiketa/dup_auto_ass1/build/bi_agent_package/build/lib/bi_agent_package/tasks\n'}
+[2.705958] (bi_agent_package) StdoutLine: {'line': b'running install\n'}
+[2.709210] (-) TimerEvent: {}
+[2.713788] (bi_agent_package) StdoutLine: {'line': b'running install_lib\n'}
+[2.756615] (bi_agent_package) StdoutLine: {'line': b'running install_data\n'}
+[2.757004] (bi_agent_package) StdoutLine: {'line': b'copying resource/bi_agent_package -> /home/nachiketa/dup_auto_ass1/install/bi_agent_package/share/ament_index/resource_index/packages\n'}
+[2.757249] (bi_agent_package) StdoutLine: {'line': b'copying package.xml -> /home/nachiketa/dup_auto_ass1/install/bi_agent_package/share/bi_agent_package\n'}
+[2.757493] (bi_agent_package) StdoutLine: {'line': b'running install_egg_info\n'}
+[2.796048] (bi_agent_package) StdoutLine: {'line': b"removing '/home/nachiketa/dup_auto_ass1/install/bi_agent_package/lib/python3.10/site-packages/bi_agent_package-0.0.0-py3.10.egg-info' (and everything under it)\n"}
+[2.796850] (bi_agent_package) StdoutLine: {'line': b'Copying ../../build/bi_agent_package/bi_agent_package.egg-info to /home/nachiketa/dup_auto_ass1/install/bi_agent_package/lib/python3.10/site-packages/bi_agent_package-0.0.0-py3.10.egg-info\n'}
+[2.800397] (bi_agent_package) StdoutLine: {'line': b'running install_scripts\n'}
+[2.809366] (-) TimerEvent: {}
+[2.909756] (-) TimerEvent: {}
+[3.010235] (-) TimerEvent: {}
+[3.110737] (-) TimerEvent: {}
+[3.122954] (bi_agent_package) StdoutLine: {'line': b'Installing bi_agent_node script to /home/nachiketa/dup_auto_ass1/install/bi_agent_package/lib/bi_agent_package\n'}
+[3.124149] (bi_agent_package) StdoutLine: {'line': b"writing list of installed files to '/home/nachiketa/dup_auto_ass1/build/bi_agent_package/install.log'\n"}
+[3.169508] (bi_agent_package) CommandEnded: {'returncode': 0}
+[3.189385] (bi_agent_package) JobEnded: {'identifier': 'bi_agent_package', 'rc': 0}
+[3.192098] (-) EventReactorShutdown: {}

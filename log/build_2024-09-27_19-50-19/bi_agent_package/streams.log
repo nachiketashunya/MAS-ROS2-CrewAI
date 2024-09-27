@@ -1,0 +1,42 @@
+[2.578s] Invoking command in '/home/nachiketa/dup_auto_ass1/src/bi_agent_package': CONDA_PROMPT_MODIFIER=(iron) PYTHONPATH=/home/nachiketa/dup_auto_ass1/build/bi_agent_package/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/nachiketa/dup_auto_ass1/install/bi_agent_package/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../build/bi_agent_package build --build-base /home/nachiketa/dup_auto_ass1/build/bi_agent_package/build install --record /home/nachiketa/dup_auto_ass1/build/bi_agent_package/install.log --single-version-externally-managed install_data
+[3.102s] /home/nachiketa/miniconda3/envs/iron/lib/python3.10/site-packages/setuptools/_distutils/dist.py:268: UserWarning: Unknown distribution option: 'tests_require'
+[3.103s]   warnings.warn(msg)
+[3.388s] running egg_info
+[3.426s] writing ../../build/bi_agent_package/bi_agent_package.egg-info/PKG-INFO
+[3.427s] writing dependency_links to ../../build/bi_agent_package/bi_agent_package.egg-info/dependency_links.txt
+[3.428s] writing entry points to ../../build/bi_agent_package/bi_agent_package.egg-info/entry_points.txt
+[3.428s] writing requirements to ../../build/bi_agent_package/bi_agent_package.egg-info/requires.txt
+[3.428s] writing top-level names to ../../build/bi_agent_package/bi_agent_package.egg-info/top_level.txt
+[3.515s] reading manifest file '../../build/bi_agent_package/bi_agent_package.egg-info/SOURCES.txt'
+[3.517s] writing manifest file '../../build/bi_agent_package/bi_agent_package.egg-info/SOURCES.txt'
+[3.518s] running build
+[3.518s] running build_py
+[3.519s] copying bi_agent_package/bi_agent.py -> /home/nachiketa/dup_auto_ass1/build/bi_agent_package/build/lib/bi_agent_package
+[3.519s] copying bi_agent_package/__init__.py -> /home/nachiketa/dup_auto_ass1/build/bi_agent_package/build/lib/bi_agent_package
+[3.520s] copying bi_agent_package/bi_agent_node.py -> /home/nachiketa/dup_auto_ass1/build/bi_agent_package/build/lib/bi_agent_package
+[3.520s] creating /home/nachiketa/dup_auto_ass1/build/bi_agent_package/build/lib/bi_agent_package/tools
+[3.520s] copying bi_agent_package/tools/__init__.py -> /home/nachiketa/dup_auto_ass1/build/bi_agent_package/build/lib/bi_agent_package/tools
+[3.521s] copying bi_agent_package/tools/fetch_nav_tool.py -> /home/nachiketa/dup_auto_ass1/build/bi_agent_package/build/lib/bi_agent_package/tools
+[3.521s] copying bi_agent_package/tasks/handle_navigation_task.py -> /home/nachiketa/dup_auto_ass1/build/bi_agent_package/build/lib/bi_agent_package/tasks
+[3.522s] copying bi_agent_package/tasks/__init__.py -> /home/nachiketa/dup_auto_ass1/build/bi_agent_package/build/lib/bi_agent_package/tasks
+[3.523s] running install
+[3.534s] running install_lib
+[3.575s] copying /home/nachiketa/dup_auto_ass1/build/bi_agent_package/build/lib/bi_agent_package/bi_agent.py -> /home/nachiketa/dup_auto_ass1/install/bi_agent_package/lib/python3.10/site-packages/bi_agent_package
+[3.575s] creating /home/nachiketa/dup_auto_ass1/install/bi_agent_package/lib/python3.10/site-packages/bi_agent_package/tools
+[3.576s] copying /home/nachiketa/dup_auto_ass1/build/bi_agent_package/build/lib/bi_agent_package/tools/__init__.py -> /home/nachiketa/dup_auto_ass1/install/bi_agent_package/lib/python3.10/site-packages/bi_agent_package/tools
+[3.576s] copying /home/nachiketa/dup_auto_ass1/build/bi_agent_package/build/lib/bi_agent_package/tools/fetch_nav_tool.py -> /home/nachiketa/dup_auto_ass1/install/bi_agent_package/lib/python3.10/site-packages/bi_agent_package/tools
+[3.577s] copying /home/nachiketa/dup_auto_ass1/build/bi_agent_package/build/lib/bi_agent_package/bi_agent_node.py -> /home/nachiketa/dup_auto_ass1/install/bi_agent_package/lib/python3.10/site-packages/bi_agent_package
+[3.578s] byte-compiling /home/nachiketa/dup_auto_ass1/install/bi_agent_package/lib/python3.10/site-packages/bi_agent_package/bi_agent.py to bi_agent.cpython-310.pyc
+[3.579s] byte-compiling /home/nachiketa/dup_auto_ass1/install/bi_agent_package/lib/python3.10/site-packages/bi_agent_package/tools/__init__.py to __init__.cpython-310.pyc
+[3.580s] byte-compiling /home/nachiketa/dup_auto_ass1/install/bi_agent_package/lib/python3.10/site-packages/bi_agent_package/tools/fetch_nav_tool.py to fetch_nav_tool.cpython-310.pyc
+[3.580s] byte-compiling /home/nachiketa/dup_auto_ass1/install/bi_agent_package/lib/python3.10/site-packages/bi_agent_package/bi_agent_node.py to bi_agent_node.cpython-310.pyc
+[3.582s] running install_data
+[3.582s] copying resource/bi_agent_package -> /home/nachiketa/dup_auto_ass1/install/bi_agent_package/share/ament_index/resource_index/packages
+[3.583s] copying package.xml -> /home/nachiketa/dup_auto_ass1/install/bi_agent_package/share/bi_agent_package
+[3.583s] running install_egg_info
+[3.625s] removing '/home/nachiketa/dup_auto_ass1/install/bi_agent_package/lib/python3.10/site-packages/bi_agent_package-0.0.0-py3.10.egg-info' (and everything under it)
+[3.627s] Copying ../../build/bi_agent_package/bi_agent_package.egg-info to /home/nachiketa/dup_auto_ass1/install/bi_agent_package/lib/python3.10/site-packages/bi_agent_package-0.0.0-py3.10.egg-info
+[3.629s] running install_scripts
+[4.090s] Installing bi_agent_node script to /home/nachiketa/dup_auto_ass1/install/bi_agent_package/lib/bi_agent_package
+[4.093s] writing list of installed files to '/home/nachiketa/dup_auto_ass1/build/bi_agent_package/install.log'
+[4.188s] Invoked command in '/home/nachiketa/dup_auto_ass1/src/bi_agent_package' returned '0': CONDA_PROMPT_MODIFIER=(iron) PYTHONPATH=/home/nachiketa/dup_auto_ass1/build/bi_agent_package/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/nachiketa/dup_auto_ass1/install/bi_agent_package/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../build/bi_agent_package build --build-base /home/nachiketa/dup_auto_ass1/build/bi_agent_package/build install --record /home/nachiketa/dup_auto_ass1/build/bi_agent_package/install.log --single-version-externally-managed install_data

@@ -1,1 +1,12 @@
-{"position": "Room A2"}
+{
+    "agents": {
+        "ci_agent_1": {
+            "position": "Entrance",
+            "navigation_path": []
+        },
+        "bi_agent_A": {
+            "position": "Building A",
+            "navigation_path": []
+        }
+    }
+}

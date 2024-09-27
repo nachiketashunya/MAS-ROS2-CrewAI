@@ -7,16 +7,35 @@ from dash.dependencies import Input, Output, State
 import threading
 import time
 import json
+import os
+from watchdog.observers import Observer
+from watchdog.events import FileSystemEventHandler
+
+class JSONFileHandler(FileSystemEventHandler):
+    def __init__(self, callback):
+        self.callback = callback
+
+    def on_modified(self, event):
+        if not event.is_directory and event.src_path.endswith("positions.json"):
+            self.callback()
 
 class GraphManager:
     def __init__(self):
         self.campus_graph = self.create_campus_graph()
-        self.agent_pos = 'Entrance'  # Initial agent position
         self.pos = self.create_layout()
         self.app = dash.Dash(__name__)
-        self.lock = threading.Lock()  # Lock to synchronize access to agent_pos
+        self.lock = threading.Lock()
         self.setup_dash_layout()
         self.json_file = "/home/nachiketa/dup_auto_ass1/src/data/positions.json"
+        self.last_modified_time = 0
+        self.agents = {
+            'ci_agent_1': {'pos': 'Entrance', 'color': 'red', 'symbol': 'star'},
+            'bi_agent_A': {'pos': 'Building A', 'color': 'blue', 'symbol': 'circle'},
+            'bi_agent_B': {'pos': 'Building B', 'color': 'green', 'symbol': 'circle'},
+            'bi_agent_C': {'pos': 'Building C', 'color': 'purple', 'symbol': 'circle'}
+        }
+
+        self.setup_file_watcher()
 
     def create_campus_graph(self):
         campus_graph = nx.DiGraph()
@@ -88,19 +107,18 @@ class GraphManager:
         )
 
         node_colors = []
-        with self.lock:  # Use lock to safely read the agent's position
-            for node in self.campus_graph.nodes():
-                if node == self.agent_pos:
-                    node_colors.append('red')
-                elif self.campus_graph.nodes[node]['type'] == 'entrance':
-                    node_colors.append('yellow')
-                elif self.campus_graph.nodes[node]['type'] == 'building':
-                    node_colors.append('blue')
-                else:
-                    node_colors.append('green')
+        node_sizes = []
+        for node in self.campus_graph.nodes():
+            if self.campus_graph.nodes[node]['type'] == 'entrance':
+                node_colors.append('yellow')
+            elif self.campus_graph.nodes[node]['type'] == 'building':
+                node_colors.append('lightblue')
+            else:
+                node_colors.append('lightgreen')
+            node_sizes.append(20)
 
         node_trace.marker.color = node_colors
-        node_trace.marker.size = [30 if node == self.agent_pos else 20 for node in self.campus_graph.nodes()]
+        node_trace.marker.size = node_sizes
 
         return node_trace
 
@@ -120,35 +138,36 @@ class GraphManager:
 
         return edge_trace
 
-    def get_agent_trace(self):
-        with self.lock:  # Use lock to safely read the agent's position
-            agent_x, agent_y = self.pos[self.agent_pos]
-       
-        # Add a small offset to the agent position for visibility
-        agent_x, agent_y = agent_x + 0.05, agent_y + 0.05
-
-        agent_trace = go.Scatter(
-            x=[agent_x], y=[agent_y],
-            mode='markers',
-            marker=dict(
-                symbol='star',  # Shape of the agent marker
-                size=30,
-                color='red',  # Color of the agent marker
-                line=dict(width=2, color='black')
-            ),
-            name='Agent'
-        )
-        return agent_trace
+    def get_agent_traces(self):
+        agent_traces = []
+        with self.lock:
+            for agent_id, agent_data in self.agents.items():
+                agent_x, agent_y = self.pos[agent_data['pos']]
+                agent_x, agent_y = agent_x + 0.05, agent_y + 0.05
+                agent_trace = go.Scatter(
+                    x=[agent_x], y=[agent_y],
+                    mode='markers',
+                    marker=dict(
+                        symbol=agent_data['symbol'],
+                        size=30,
+                        color=agent_data['color'],
+                        line=dict(width=2, color='black')
+                    ),
+                    name=agent_id
+                )
+                agent_traces.append(agent_trace)
+        return agent_traces
 
     def create_figure(self):
         fig = make_subplots(rows=1, cols=1)
         fig.add_trace(self.get_edge_trace())
         fig.add_trace(self.get_node_trace())
-        fig.add_trace(self.get_agent_trace())  # Add agent trace
+        for agent_trace in self.get_agent_traces():
+            fig.add_trace(agent_trace)
         fig.update_layout(
             title='Campus Navigation Graph',
             titlefont_size=16,
-            showlegend=False,
+            showlegend=True,
             hovermode='closest',
             margin=dict(b=20, l=5, r=5, t=40),
             xaxis=dict(showgrid=False, zeroline=False, showticklabels=False),
@@ -157,47 +176,51 @@ class GraphManager:
 
     def setup_dash_layout(self):
         self.app.layout = html.Div([
-            dcc.Graph(id='live-graph', animate=True),
+            dcc.Graph(id='live-graph', animate=False),
             dcc.Interval(
                 id='interval-component',
-                interval=1 * 1000,  # in milliseconds
+                interval=1 * 10000,  # in milliseconds
                 n_intervals=0
             )
         ])
 
         @self.app.callback(Output('live-graph', 'figure'), Input('interval-component', 'n_intervals'))
         def update_graph_live(n):
-            self.read_pos_from_json()
             return self.create_figure()
-    
+
     def read_pos_from_json(self):
         try:
-            with open(self.json_file, "r") as f:
-                data = json.load(f)
-                with self.lock:
-                    self.agent_pos = data.get('position', 'Entrance')
-                
-            print(f"Read new position from json {self.agent_pos}")
-        
-        except Exception as e:
-            print(f"Error reading from JSON file: {e}")       
+            current_modified_time = os.path.getmtime(self.json_file)
+            if current_modified_time > self.last_modified_time:
+                with open(self.json_file, "r") as f:
+                    data = json.load(f)
 
+                with self.lock:
+                    agents_data = data.get('agents', {})
+                    for agent_id, agent_data in agents_data.items():
+                        if agent_id in self.agents:
+                            self.agents[agent_id]['pos'] = agent_data.get('position', self.agents[agent_id]['pos'])
+                            self.agents[agent_id]['navigation_path'] = agent_data.get('navigation_path', [])
+
+                self.last_modified_time = current_modified_time
+                print(f"Updated positions: {self.agents}")
+
+        except FileNotFoundError:
+            print(f"Error: {self.json_file} not found.")
+        except Exception as e:
+            print(f"Error reading from JSON file: {e}")
+
+    def setup_file_watcher(self):
+        event_handler = JSONFileHandler(self.read_pos_from_json)
+        observer = Observer()
+        observer.schedule(event_handler, path=os.path.dirname(self.json_file), recursive=False)
+        observer.start()
 
     def run(self):
-        print("Starting Dash server...")  # Debug print
-        self.app.run_server(debug=True, use_reloader=False)
+        print("Starting Dash server...")
+        self.app.run_server(debug=False, use_reloader=False)
 
 # Usage
 if __name__ == "__main__":
     manager = GraphManager()
     manager.run()
-    # Start the graph manager in a separate thread
-    # graph_thread = threading.Thread(target=manager.run)
-    # graph_thread.daemon = True
-    # graph_thread.start()
-
-    # # Simulate changing the agent's position over time
-    # positions = ['Building A', 'Room A1', 'Room A2', 'Building B', 'Room B1', 'Entrance']
-    # for pos in positions:
-    #     time.sleep(2)  # Delay to simulate real-time updates
-    #     manager.update_agent_position(pos)

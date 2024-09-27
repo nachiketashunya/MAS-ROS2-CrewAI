@@ -1,0 +1,36 @@
+[1.733s] Invoking command in '/home/nachiketa/dup_auto_ass1/src/ci_agent_package': CONDA_PROMPT_MODIFIER=(iron) PYTHONPATH=/home/nachiketa/dup_auto_ass1/build/ci_agent_package/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/nachiketa/dup_auto_ass1/install/ci_agent_package/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../build/ci_agent_package build --build-base /home/nachiketa/dup_auto_ass1/build/ci_agent_package/build install --record /home/nachiketa/dup_auto_ass1/build/ci_agent_package/install.log --single-version-externally-managed install_data
+[2.054s] /home/nachiketa/miniconda3/envs/iron/lib/python3.10/site-packages/setuptools/_distutils/dist.py:268: UserWarning: Unknown distribution option: 'tests_require'
+[2.055s]   warnings.warn(msg)
+[2.344s] running egg_info
+[2.382s] writing ../../build/ci_agent_package/ci_agent_package.egg-info/PKG-INFO
+[2.383s] writing dependency_links to ../../build/ci_agent_package/ci_agent_package.egg-info/dependency_links.txt
+[2.383s] writing entry points to ../../build/ci_agent_package/ci_agent_package.egg-info/entry_points.txt
+[2.384s] writing requirements to ../../build/ci_agent_package/ci_agent_package.egg-info/requires.txt
+[2.384s] writing top-level names to ../../build/ci_agent_package/ci_agent_package.egg-info/top_level.txt
+[2.470s] reading manifest file '../../build/ci_agent_package/ci_agent_package.egg-info/SOURCES.txt'
+[2.472s] writing manifest file '../../build/ci_agent_package/ci_agent_package.egg-info/SOURCES.txt'
+[2.473s] running build
+[2.473s] running build_py
+[2.474s] copying ci_agent_package/ci_agent_node.py -> /home/nachiketa/dup_auto_ass1/build/ci_agent_package/build/lib/ci_agent_package
+[2.474s] copying ci_agent_package/__init__.py -> /home/nachiketa/dup_auto_ass1/build/ci_agent_package/build/lib/ci_agent_package
+[2.474s] copying ci_agent_package/ci_agent.py -> /home/nachiketa/dup_auto_ass1/build/ci_agent_package/build/lib/ci_agent_package
+[2.476s] copying ci_agent_package/tools/nav_to_host_tool.py -> /home/nachiketa/dup_auto_ass1/build/ci_agent_package/build/lib/ci_agent_package/tools
+[2.476s] copying ci_agent_package/tools/nav_back_to_entrance_tool.py -> /home/nachiketa/dup_auto_ass1/build/ci_agent_package/build/lib/ci_agent_package/tools
+[2.478s] copying ci_agent_package/tools/req_building_nav_tool.py -> /home/nachiketa/dup_auto_ass1/build/ci_agent_package/build/lib/ci_agent_package/tools
+[2.479s] copying ci_agent_package/tools/nav_to_building_tool.py -> /home/nachiketa/dup_auto_ass1/build/ci_agent_package/build/lib/ci_agent_package/tools
+[2.479s] copying ci_agent_package/tools/__init__.py -> /home/nachiketa/dup_auto_ass1/build/ci_agent_package/build/lib/ci_agent_package/tools
+[2.480s] copying ci_agent_package/tasks/escort_to_host.py -> /home/nachiketa/dup_auto_ass1/build/ci_agent_package/build/lib/ci_agent_package/tasks
+[2.480s] copying ci_agent_package/tasks/escort_to_entrance.py -> /home/nachiketa/dup_auto_ass1/build/ci_agent_package/build/lib/ci_agent_package/tasks
+[2.481s] copying ci_agent_package/tasks/__init__.py -> /home/nachiketa/dup_auto_ass1/build/ci_agent_package/build/lib/ci_agent_package/tasks
+[2.482s] running install
+[2.490s] running install_lib
+[2.540s] running install_data
+[2.541s] copying resource/ci_agent_package -> /home/nachiketa/dup_auto_ass1/install/ci_agent_package/share/ament_index/resource_index/packages
+[2.541s] copying package.xml -> /home/nachiketa/dup_auto_ass1/install/ci_agent_package/share/ci_agent_package
+[2.541s] running install_egg_info
+[2.583s] removing '/home/nachiketa/dup_auto_ass1/install/ci_agent_package/lib/python3.10/site-packages/ci_agent_package-0.0.0-py3.10.egg-info' (and everything under it)
+[2.584s] Copying ../../build/ci_agent_package/ci_agent_package.egg-info to /home/nachiketa/dup_auto_ass1/install/ci_agent_package/lib/python3.10/site-packages/ci_agent_package-0.0.0-py3.10.egg-info
+[2.586s] running install_scripts
+[2.914s] Installing ci_agent_node script to /home/nachiketa/dup_auto_ass1/install/ci_agent_package/lib/ci_agent_package
+[2.916s] writing list of installed files to '/home/nachiketa/dup_auto_ass1/build/ci_agent_package/install.log'
+[2.973s] Invoked command in '/home/nachiketa/dup_auto_ass1/src/ci_agent_package' returned '0': CONDA_PROMPT_MODIFIER=(iron) PYTHONPATH=/home/nachiketa/dup_auto_ass1/build/ci_agent_package/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/nachiketa/dup_auto_ass1/install/ci_agent_package/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py egg_info --egg-base ../../build/ci_agent_package build --build-base /home/nachiketa/dup_auto_ass1/build/ci_agent_package/build install --record /home/nachiketa/dup_auto_ass1/build/ci_agent_package/install.log --single-version-externally-managed install_data

@@ -1,0 +1,43 @@
+{
+    "buildings": {
+      "Building A": {
+        "rooms": {
+          "Room A1": {
+            "path": ["Building A", "Room A1"]
+          },
+          "Room A2": {
+            "path": ["Building A", "Room A2"]
+          },
+          "Room A3": {
+            "path": ["Building A", "Room A3"]
+          }
+        }
+      },
+      "Building B": {
+        "rooms": {
+          "Room B1": {
+            "path": ["Building B", "Room B1"]
+          },
+          "Room B2": {
+            "path": ["Building B", "Room B2"]
+          }
+        }
+      },
+      "Building C": {
+        "rooms": {
+          "Room C1": {
+            "path": ["Building C", "Room C1"]
+          },
+          "Room C2": {
+            "path": ["Building C", "Room C2"]
+          },
+          "Room C3": {
+            "path": ["Building C", "Room C3"]
+          },
+          "Room C4": {
+            "path": ["Building C", "Room C4"]
+          }
+        }
+      }
+    }
+  }

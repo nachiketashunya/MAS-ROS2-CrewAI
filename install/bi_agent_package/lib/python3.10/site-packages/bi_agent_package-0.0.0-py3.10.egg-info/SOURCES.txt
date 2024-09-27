@@ -13,6 +13,8 @@ bi_agent_package/bi_agent.py
 bi_agent_package/bi_agent_node.py
 bi_agent_package/tasks/__init__.py
 bi_agent_package/tasks/handle_navigation_task.py
+bi_agent_package/tools/__init__.py
+bi_agent_package/tools/fetch_nav_tool.py
 resource/bi_agent_package
 test/test_copyright.py
 test/test_flake8.py

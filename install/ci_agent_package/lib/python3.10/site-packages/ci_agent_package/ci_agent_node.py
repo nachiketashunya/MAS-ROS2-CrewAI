@@ -1,16 +1,17 @@
 import rclpy
 from rclpy.node import Node
 from std_msgs.msg import String
-from ci_agent_package.ci_agent import CIAgent  # Import the updated CI Agent class
 import threading
 import sys
 import logging
 import time
 import random
 import json
+from rclpy.executors import MultiThreadedExecutor
 
 sys.path.append("/home/nachiketa/dup_auto_ass1/src")
-from common_interfaces.src.graph_manager import GraphManager  # Path to graph_manager
+from ci_agent_package.ci_agent import CIAgent
+from common_interfaces.src.graph_manager import GraphManager
 
 class CIAgentNode(Node):
     def __init__(self):
@@ -18,95 +19,91 @@ class CIAgentNode(Node):
 
         print("Initialization")
 
-        # Create a CI agent instance from the CI agent class (now uses custom tools)
+        self.publisher = self.create_publisher(String, 'ci_to_bi_navigation_request', 10)
+        self.subscriber = self.create_subscription(
+            String,
+            'bi_to_ci_navigation_response',
+            self.receive_navigation_response,
+            10
+        )
+        
         self.ci_agent = CIAgent(
-            publisher=self.create_publisher(String, 'ci_to_bi_navigation_request', 10),
-            subscriber=self.create_subscription(
-                String,
-                'bi_to_ci_navigation_response',
-                self.receive_navigation_response,
-                10
-            )
+            publisher=self.publisher,
+            subscriber=self.subscriber
         )
 
-        # JSON file for coordinates
         self.json_file = "/home/nachiketa/dup_auto_ass1/src/data/positions.json"
-
-        # State to track the received navigation response
         self.navigation_path = None
+        self.navigation_response_received = threading.Event()
 
     def receive_navigation_response(self, msg):
-        """
-        Handle the response from the BI agent.
-        This response provides the internal path to the host.
-        """
-        self.navigation_path = msg.data
-        self.get_logger().info(f'Received navigation response: {msg.data}')
+        print("Response Received: ", msg)
+        self.ci_agent.update_navigation_path(msg.data)
+        self.navigation_response_received.set()
 
     def write_pos_to_json(self, new_pos):
         data = {'position': new_pos}
-        json_file = "/home/nachiketa/dup_auto_ass1/src/data/positions.json"
-        with open(json_file, "w") as f:
+        with open(self.json_file, "w") as f:
             json.dump(data, f)
         print(f"Updated JSON file with new position: {new_pos}")
 
-    def update_agent_position(self):
-        """
-        Function to update agent position periodically.
-        """
-        graph_manager = GraphManager()
-        while rclpy.ok():
-            try:
-                # Update agent position based on current ROS node state
-                all_nodes = list(graph_manager.campus_graph.nodes())
-                random_pos = random.choice(all_nodes)
-                self.write_pos_to_json(random_pos)
-                logging.debug(f"Agent position updated to {random_pos}")
-                time.sleep(5)  # Update every 5 seconds
-            except Exception as e:
-                logging.error(f"Error updating agent position: {e}")
+    # def write_pos_to_json(agent_id, new_pos, navigation_path=None):
+    #     # Load the existing JSON data
+    #     json_file = "/home/nachiketa/dup_auto_ass1/src/data/positions.json"
+    #     try:
+    #         with open(json_file, "r") as f:
+    #             data = json.load(f)
+    #     except FileNotFoundError:
+    #         data = {"agents": {}}
+
+    #     # Update the agent's position and navigation path
+    #     if agent_id not in data["agents"]:
+    #         data["agents"][agent_id] = {"position": new_pos, "navigation_path": []}
+        
+    #     data["agents"][agent_id]["position"] = new_pos
+        
+    #     if navigation_path:
+    #         data["agents"][agent_id]["navigation_path"] = navigation_path
+
+    #     # Write the updated data back to the JSON file
+    #     with open(json_file, "w") as f:
+    #         json.dump(data, f, indent=4)
+        
+    #     print(f"Updated JSON file for {agent_id}: Position={new_pos}, Navigation Path={navigation_path}")
 
     def guide_visitor(self, visitor_id, building_id):
-        """
-        Start the process to guide the visitor to the building and then to the host.
-        This function uses the CI agent and its custom tools.
-        """
-        try:
-            # Phase 1: Guide visitor to the building entrance
-            result = self.ci_agent.guide_visitor(visitor_id, building_id)
-            self.get_logger().info(result)
-
-        except Exception as e:
-            self.get_logger().error(f"Error during guidance: {e}")
-            raise e
+        tasks = self.ci_agent.define_tasks()
+        
+        
+        result1 = tasks[0].execute(inputs={'visitor_id': visitor_id, 'building_id': building_id, 'navigation_path': None})
+        result2 = tasks[1].execute(inputs={'visitor_id': visitor_id, 'building_id': building_id, 'navigation_path': result1})
+            
 
 def main(args=None):
     rclpy.init(args=args)
 
-    # Initialize the CI agent node
     node = CIAgentNode()
+    
+    executor = MultiThreadedExecutor()
+    executor.add_node(node)
 
-    # Simulate a navigation request for a visitor
     visitor_id = "V001"
-    building_id = "B001"
+    building_id = "Building A"
 
     logging.info(f"Starting the Escort Task with visitor {visitor_id} and building {building_id}")
 
+    # Run the guide_visitor method in a separate thread
+    guide_thread = threading.Thread(target=node.guide_visitor, args=(visitor_id, building_id))
+    guide_thread.start()
+
     try:
-        # Guide the visitor using the CI agent
-        node.guide_visitor(visitor_id=visitor_id, building_id=building_id)
-
-        # Optionally, update the agent's position on the campus graph
-        node.update_agent_position()
-
-    except Exception as e:
-        logging.error(f"Error occurred: {e}")
-
-    # Spin to keep the node alive and handle communication
-    rclpy.spin(node)
-
-    # Shutdown ROS
-    rclpy.shutdown()
+        executor.spin()
+    except KeyboardInterrupt:
+        pass
+    finally:
+        executor.shutdown()
+        node.destroy_node()
+        rclpy.shutdown()
 
 if __name__ == '__main__':
     main()
