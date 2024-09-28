@@ -2,99 +2,135 @@ import rclpy
 from rclpy.node import Node
 from std_msgs.msg import String
 import threading
-import sys
-import logging
-import time
-import random
 import json
 from rclpy.executors import MultiThreadedExecutor
-
-sys.path.append("/home/nachiketa/dup_auto_ass1/src")
 from ci_agent_package.ci_agent import CIAgent
-from common_interfaces.src.graph_manager import GraphManager
+import time
+
+
+class CIAgentThread(threading.Thread):
+    """
+    Thread class to run each CIAgent in its own thread.
+    """
+    def _init_(self, ci_agent):
+        threading.Thread._init_(self)
+        self.ci_agent = ci_agent
+        self.daemon = True  # Ensure that threads exit when the main program exits
+
+    def run(self):
+        while True:
+            if not self.ci_agent.is_available():
+                print(f"{self.ci_agent.agent_id} is guiding visitor {self.ci_agent.visitor_id}.")
+                # Simulate agent guiding the visitor
+                self.ci_agent.perform_guidance()
+                self.ci_agent.set_available()  # Mark agent as available again after completing task
+            time.sleep(1)
+
 
 class CIAgentNode(Node):
-    def __init__(self):
-        super().__init__('ci_agent_node')
+    def _init_(self):
+        super()._init_('ci_agent_node')
 
-        print("Initialization")
+        self.ci_agents = []
+        self.lock = threading.Lock()  # To manage thread-safe access to agent availability
 
-        self.publisher = self.create_publisher(String, 'ci_to_bi_navigation_request', 10)
+        # Initialize 3 CI agents and start them in separate threads
+        for i in range(3):
+            ci_agent = CIAgent(
+                publisher=self.create_publisher(String, 'ci_to_bi_navigation_request', 10),
+                subscriber=None,
+                agent_id=f"ci_agent_{i+1}"
+            )
+            self.ci_agents.append(ci_agent)
+
+            # Start each CIAgent in its own thread
+            agent_thread = CIAgentThread(ci_agent)
+            agent_thread.start()
+
+        print("CI node Initialization")
+
+        # Publishers and Subscribers
+        self.confirm_vis_req = self.create_publisher(String, 'ci_to_vi_confirm_res', 10)
+        self.vis_req_subscriber = self.create_subscription(
+            String,
+            'vi_to_ci_request',
+            self.handle_vis_req,
+            10
+        )
+
+        # Listener for responses from BI agent
         self.subscriber = self.create_subscription(
             String,
             'bi_to_ci_navigation_response',
             self.receive_navigation_response,
             10
         )
-        
-        self.ci_agent = CIAgent(
-            publisher=self.publisher,
-            subscriber=self.subscriber
-        )
 
-        self.json_file = "/home/nachiketa/dup_auto_ass1/src/data/positions.json"
-        self.navigation_path = None
         self.navigation_response_received = threading.Event()
 
+    def handle_vis_req(self, msg):
+        """
+        Handle visitor requests.
+        """
+        data = msg.data.split("==>")
+        vis_id, building, room, host = data[0], data[1], data[2], data[3]
+
+        print(f"Visitor {vis_id} wants to visit HOST: {host} in {room}, {building}")
+
+        # Find an available CI agent
+        agent = self.avail_ci_agent()
+        
+        if agent:
+            with self.lock:  # Thread-safe access to agent
+                agent.available = False
+                print(f"{agent.agent_id} is guiding {vis_id} to {host}")
+
+                # Notify visitor that a CI agent has been assigned
+                confirmation_msg = String()
+                confirmation_msg.data = vis_id
+                self.confirm_vis_req.publish(confirmation_msg)
+                print(f"Confirmation for {vis_id} published")
+
+                # Guide visitor (this will be handled in the agent's thread)
+                agent.assign_task(visitor_id=vis_id, building=building, room=room, host=host)
+        else:
+            print("No available CI agent.")
+
     def receive_navigation_response(self, msg):
-        print("Response Received: ", msg)
-        self.ci_agent.update_navigation_path(msg.data)
-        self.navigation_response_received.set()
+        """
+        Receive navigation response from BI agent.
+        """
+        print("Navigation Response Received")
+        path = msg.data.split('->')
+        agent_id = path.pop()  # Last item is the agent ID
 
-    def write_pos_to_json(self, new_pos):
-        data = {'position': new_pos}
-        with open(self.json_file, "w") as f:
-            json.dump(data, f)
-        print(f"Updated JSON file with new position: {new_pos}")
+        # Update the respective CI agent with the navigation path
+        for ci_agent in self.ci_agents:
+            if ci_agent.agent_id == agent_id:
+                nav_path = "->".join(path)
+                ci_agent.update_navigation_path(nav_path)
+                self.navigation_response_received.set()
 
-    # def write_pos_to_json(agent_id, new_pos, navigation_path=None):
-    #     # Load the existing JSON data
-    #     json_file = "/home/nachiketa/dup_auto_ass1/src/data/positions.json"
-    #     try:
-    #         with open(json_file, "r") as f:
-    #             data = json.load(f)
-    #     except FileNotFoundError:
-    #         data = {"agents": {}}
+    def avail_ci_agent(self):
+        """
+        Find an available CI agent.
+        """
+        with self.lock:
+            for ci_agent in self.ci_agents:
+                if ci_agent.is_available():
+                    return ci_agent
+        return None
 
-    #     # Update the agent's position and navigation path
-    #     if agent_id not in data["agents"]:
-    #         data["agents"][agent_id] = {"position": new_pos, "navigation_path": []}
-        
-    #     data["agents"][agent_id]["position"] = new_pos
-        
-    #     if navigation_path:
-    #         data["agents"][agent_id]["navigation_path"] = navigation_path
-
-    #     # Write the updated data back to the JSON file
-    #     with open(json_file, "w") as f:
-    #         json.dump(data, f, indent=4)
-        
-    #     print(f"Updated JSON file for {agent_id}: Position={new_pos}, Navigation Path={navigation_path}")
-
-    def guide_visitor(self, visitor_id, building_id):
-        tasks = self.ci_agent.define_tasks()
-        
-        
-        result1 = tasks[0].execute(inputs={'visitor_id': visitor_id, 'building_id': building_id, 'navigation_path': None})
-        result2 = tasks[1].execute(inputs={'visitor_id': visitor_id, 'building_id': building_id, 'navigation_path': result1})
-            
 
 def main(args=None):
     rclpy.init(args=args)
 
+    # Initialize the CI agent node (manager)
     node = CIAgentNode()
-    
+
+    # MultiThreadedExecutor for handling node callbacks
     executor = MultiThreadedExecutor()
     executor.add_node(node)
-
-    visitor_id = "V001"
-    building_id = "Building A"
-
-    logging.info(f"Starting the Escort Task with visitor {visitor_id} and building {building_id}")
-
-    # Run the guide_visitor method in a separate thread
-    guide_thread = threading.Thread(target=node.guide_visitor, args=(visitor_id, building_id))
-    guide_thread.start()
 
     try:
         executor.spin()
@@ -105,5 +141,6 @@ def main(args=None):
         node.destroy_node()
         rclpy.shutdown()
 
-if __name__ == '__main__':
+
+if _name_ == '_main_':
     main()

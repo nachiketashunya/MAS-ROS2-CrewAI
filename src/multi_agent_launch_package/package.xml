@@ -1,0 +1,19 @@
+<package format="3">
+  <name>multi_agent_launch_package</name>
+  <version>0.0.0</version>
+  <description>Launch file to run multiple agents</description>
+  <maintainer email="your_email@example.com">your_name</maintainer>
+  <license>Apache License 2.0</license>
+
+  <buildtool_depend>ament_cmake</buildtool_depend>
+
+  <!-- Add dependencies -->
+  <depend>rclpy</depend>
+  <depend>ci_agent_package</depend> <!-- Add the CI agent package -->
+  <depend>bi_agent_package</depend> <!-- Add the BI agent package -->
+  <depend>visitor_agent_package</depend> <!-- Add the VI agent package -->
+  
+  <export>
+    <build_type>ament_python</build_type>
+  </export>
+</package>

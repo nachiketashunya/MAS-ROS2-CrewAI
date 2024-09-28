@@ -20,6 +20,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
+            'vi_agent_node = visitor_agent_package.vi_agent_node:main'
         ],
     },
 )

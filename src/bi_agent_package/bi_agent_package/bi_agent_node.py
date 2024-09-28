@@ -2,7 +2,7 @@ import rclpy
 from rclpy.node import Node
 from std_msgs.msg import String
 from bi_agent_package.bi_agent import BIAgent
-import json
+from rclpy.executors import MultiThreadedExecutor
 
 class BIAgentNode(Node):
     def __init__(self):
@@ -29,13 +29,15 @@ class BIAgentNode(Node):
         Handle navigation requests from the CI agent.
         """
         data = msg.data
-        # data = json.loads(msg.data)
+        data = data.split("==>")
 
-        path = self.bi_agent.tools[0].run(data)
-        # path = self.bi_agent.tools[0].run(data['building_id'])
+        print("Data", data)
+
+        path = self.bi_agent.tools[0].run(data[0], data[1])
+        path.append(data[2]) # Add ci_agent id to the end of the path
+
         ret_path = "->".join(path)
         self.send_navigation_response(ret_path)
-        # self.get_logger().info(response)
 
     def send_navigation_response(self, response_data):
         """
@@ -44,21 +46,26 @@ class BIAgentNode(Node):
         msg = String()
         msg.data = response_data
         self.navigation_response_publisher.publish(msg)
-        print("Navigation response published")
 
-        self.get_logger().info(f"Sent navigation response: {msg.data}")
+        print("Navigation Reponse sent from bi_agent")
 
 def main(args=None):
     rclpy.init(args=args)
 
-    # Initialize the BI agent node
     node = BIAgentNode()
 
-    # Spin to keep the node alive and handle communication
-    rclpy.spin(node)
+    # MultiThreadedExecutor for handling node callbacks
+    executor = MultiThreadedExecutor()
+    executor.add_node(node)
 
-    # Shutdown ROS
-    rclpy.shutdown()
+    try:
+        executor.spin()
+    except KeyboardInterrupt:
+        pass
+    finally:
+        executor.shutdown()
+        node.destroy_node()
+        rclpy.shutdown()
 
 if __name__ == '__main__':
     main()

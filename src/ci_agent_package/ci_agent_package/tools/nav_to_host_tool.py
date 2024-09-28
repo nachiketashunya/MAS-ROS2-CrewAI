@@ -9,7 +9,7 @@ class NavigateToHostTool(BaseTool):
     name: str = "Navigate to Host Tool"
     description: str = "This tool is for navigation to host of visitor."
 
-    def _run(self, visitor_id, building_id, navigation_path):
+    def _run(self, agent_id, visitor_id, building_id, navigation_path):
         # Simulate guiding the visitor inside the building using the provided navigation path
         print(f"Guiding visitor {visitor_id} inside building {building_id} using the navigation path: {navigation_path}")
 
@@ -17,7 +17,7 @@ class NavigateToHostTool(BaseTool):
 
         for path in path_list:
             # Update the information
-            write_pos_to_json('ci_agent_1', path, None)
+            write_pos_to_json(agent_id, path, None)
             time.sleep(2)
 
         return f"Visitor {visitor_id} successfully guided to the host in building {building_id}."

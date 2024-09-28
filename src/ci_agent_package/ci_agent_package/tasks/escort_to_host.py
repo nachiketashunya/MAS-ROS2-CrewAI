@@ -11,17 +11,19 @@ class EscortToHostTask(Task):
     def execute(self, inputs):
         visitor_id = inputs['visitor_id']
         building_id = inputs['building_id']
+        agent_id = inputs['agent_id']
+        room = inputs['room']
         
         # Phase 1: Guide to building entrance
-        result = self.agent.tools[0].run(visitor_id, building_id)
+        result = self.agent.tools[0].run(agent_id, visitor_id, building_id)
         print(result)
 
         # Phase 2: Request navigation from BI agent
-        navigation_path = self.agent.tools[1].run(visitor_id, building_id)
+        navigation_path = self.agent.tools[1].run(agent_id, visitor_id, building_id, room)
         print(navigation_path)
 
         # Phase 3: Guide to host
-        result = self.agent.tools[2].run(visitor_id, building_id, navigation_path)
+        result = self.agent.tools[2].run(agent_id, visitor_id, building_id, navigation_path)
         print(result)
 
         return navigation_path

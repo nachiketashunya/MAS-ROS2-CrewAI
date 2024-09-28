@@ -1,2 +1,0 @@
-[console_scripts]
-ci_agent_node = ci_agent_package.ci_agent_node:main

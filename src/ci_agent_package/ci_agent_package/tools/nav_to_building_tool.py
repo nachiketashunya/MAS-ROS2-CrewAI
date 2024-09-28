@@ -10,11 +10,10 @@ class NavigateToBuildingTool(BaseTool):
         super().__init__(name="Navigate to Building Tool", description="Tool to navigate")
         self._publisher = publisher
 
-    def _run(self, visitor_id, building_id):
-        message = f"ci_agent_1 is navigating to {building_id} with visitor {visitor_id}"
+    def _run(self, agent_id, visitor_id, building_id):
+        message = f"{agent_id} is navigating to {building_id} with visitor {visitor_id}"
 
         # Update the information
-        write_pos_to_json('ci_agent_1', building_id, None)
+        write_pos_to_json(agent_id, building_id, None)
 
-        self._publisher.publish(String(data=message))
         return message

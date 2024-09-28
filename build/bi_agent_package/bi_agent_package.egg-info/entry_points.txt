@@ -1,2 +1,0 @@
-[console_scripts]
-bi_agent_node = bi_agent_package.bi_agent_node:main

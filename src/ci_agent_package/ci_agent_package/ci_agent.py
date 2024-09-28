@@ -8,12 +8,16 @@ from ci_agent_package.tasks.escort_to_host import EscortToHostTask
 
 
 class CIAgent:
-    def __init__(self, publisher, subscriber):
+    def __init__(self, publisher, subscriber, agent_id):
         # Initialize the tools
         self.publisher = publisher
         self.subscriber = subscriber
 
+        self.agent_id = agent_id
+        self.available = True
+        self.position = 'Entrance'
         # Create the tools used by the agent
+
         self.navigate_to_building_tool = NavigateToBuildingTool(publisher)
         self.request_building_navigation_tool = RequestBuildingNavigationTool(publisher, subscriber)
         self.navigate_to_host_tool = NavigateToHostTool()
@@ -36,6 +40,16 @@ class CIAgent:
             verbose=True,
             tools=tools  # Attach tools to the agent
         )
+    
+    def set_available(self):
+        self.available = True
+        self.position = 'Entrance'
+    
+    def set_unavailable(self):
+        self.available = False
+    
+    def is_available(self):
+        return self.available
 
     def update_navigation_path(self, navigation_path):
         """
@@ -53,3 +67,11 @@ class CIAgent:
         escort_to_entrance_task = EscortToEntranceTask(agent=self.agent)
 
         return [escort_to_host_task, escort_to_entrance_task]
+
+    def guide_visitor(self, visitor_id, building, room, host):
+        
+        tasks = self.define_tasks()
+        
+        result1 = tasks[0].execute(inputs={'agent_id': self.agent_id, 'visitor_id': visitor_id, 'building_id': building, 'room': room, 'host': host, 'navigation_path': None})
+        result2 = tasks[1].execute(inputs={'agent_id': self.agent_id, 'visitor_id': visitor_id, 'building_id': building, 'room': room, 'host': host, 'navigation_path': result1})
+    
