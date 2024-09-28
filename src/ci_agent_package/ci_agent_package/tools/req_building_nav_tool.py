@@ -24,15 +24,12 @@ class RequestBuildingNavigationTool(BaseTool):
     def _run(self, agent_id, visitor_id, building_id, room):
         self._navigation_path = None
 
-        # Send navigation request
-        self.send_request(agent_id, visitor_id, building_id, room)
-
         # Wait for a response from BI agent
         print("Waiting for navigation response...")
         while self._navigation_path is None:
-            print("Waiting")
-            time.sleep(10)
             self.send_request(agent_id, visitor_id, building_id, room)
-            print(f"Resent the navigation request to BI Agent")
+            print(f"Sent the navigation request to BI Agent")
+            print("Waiting for the navigation response")
+            time.sleep(60)
         
         return self._navigation_path

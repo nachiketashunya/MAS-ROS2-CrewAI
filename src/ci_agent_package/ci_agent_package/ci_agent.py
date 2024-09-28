@@ -8,22 +8,21 @@ from ci_agent_package.tasks.escort_to_host import EscortToHostTask
 
 
 class CIAgent:
-    def __init__(self, publisher, subscriber, agent_id):
+    def __init__(self, publisher, subscriber, agent_id, callback_group):
         # Initialize the tools
         self.publisher = publisher
         self.subscriber = subscriber
-
         self.agent_id = agent_id
         self.available = True
         self.position = 'Entrance'
-        # Create the tools used by the agent
 
+        # Tools for navigation
         self.navigate_to_building_tool = NavigateToBuildingTool(publisher)
         self.request_building_navigation_tool = RequestBuildingNavigationTool(publisher, subscriber)
         self.navigate_to_host_tool = NavigateToHostTool()
         self.navigate_back_to_entrance_tool = NavigateBackToEntranceTool()
 
-        # Assign the tools to the agent
+        # Attach tools to the agent
         tools = [
             self.navigate_to_building_tool,
             self.request_building_navigation_tool,
@@ -38,7 +37,7 @@ class CIAgent:
             backstory="You're responsible for guiding visitors from the campus entrance to the host and then back to the entrance.",
             memory=False,
             verbose=True,
-            tools=tools  # Attach tools to the agent
+            tools=tools
         )
     
     def set_available(self):
@@ -53,15 +52,14 @@ class CIAgent:
 
     def update_navigation_path(self, navigation_path):
         """
-        Method to update the navigation path inside the RequestBuildingNavigationTool.
-        This will be called from the ROS subscriber when the BI agent provides a response.
+        Update the navigation path inside the RequestBuildingNavigationTool.
         """
         print(f"Updating navigation path: {navigation_path}")
         self.request_building_navigation_tool.set_navigation_path(navigation_path)
 
     def define_tasks(self):
         """
-        Define the tasks for the agent, such as escorting the visitor to the host and back to the entrance.
+        Define tasks such as escorting the visitor to the host and back to the entrance.
         """
         escort_to_host_task = EscortToHostTask(agent=self.agent)
         escort_to_entrance_task = EscortToEntranceTask(agent=self.agent)
@@ -69,9 +67,10 @@ class CIAgent:
         return [escort_to_host_task, escort_to_entrance_task]
 
     def guide_visitor(self, visitor_id, building, room, host):
-        
+        """
+        Guide the visitor to the building, host, and back to the entrance.
+        """
         tasks = self.define_tasks()
         
         result1 = tasks[0].execute(inputs={'agent_id': self.agent_id, 'visitor_id': visitor_id, 'building_id': building, 'room': room, 'host': host, 'navigation_path': None})
         result2 = tasks[1].execute(inputs={'agent_id': self.agent_id, 'visitor_id': visitor_id, 'building_id': building, 'room': room, 'host': host, 'navigation_path': result1})
-    

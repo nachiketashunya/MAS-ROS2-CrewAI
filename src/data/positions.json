@@ -1,11 +1,19 @@
 {
     "agents": {
         "ci_agent_1": {
-            "position": "Building B",
+            "position": "Entrance",
             "navigation_path": []
         },
         "bi_agent_A": {
             "position": "Building A",
+            "navigation_path": []
+        },
+        "ci_agent_2": {
+            "position": "Entrance",
+            "navigation_path": []
+        },
+        "ci_agent_3": {
+            "position": "Entrance",
             "navigation_path": []
         }
     }
