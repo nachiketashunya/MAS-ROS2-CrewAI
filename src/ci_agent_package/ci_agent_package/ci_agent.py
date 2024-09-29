@@ -9,21 +9,24 @@ from ci_agent_package.tasks.escort_to_host import EscortToHostTask
 import sys
 sys.path.append("/home/nachiketa/dup_auto_ass1/src")
 from common_interfaces.src.update_json import write_pos_to_json
-from common_interfaces.src.logger_config import ret_logger
+from common_interfaces.src.logger_config import get_logger
+
+from std_msgs.msg import String
 
 
 class CIAgent:
-    def __init__(self, publisher, subscriber, agent_id, callback_group):
+    def __init__(self, publisher, subscriber, agent_id, vi_indicator, callback_group):
         # Initialize the tools
         self.publisher = publisher
         self.subscriber = subscriber
         self.agent_id = agent_id
+        self.vi_indicator = vi_indicator
         self.available = True
 
         self.total_visitors = 0
         self.total_violations = 0
 
-        self.logger = ret_logger()
+        self.logger = get_logger(log_file_path="/home/nachiketa/dup_auto_ass1/src/data/events.log")
 
         # Tools for navigation
         self.navigate_to_building_tool = NavigateToBuildingTool(publisher)
@@ -97,6 +100,12 @@ class CIAgent:
         else:
             inputs['navigation_path'] = result1
             result2 = tasks[1].execute(inputs=inputs)
+            
+        self.set_available()
+        self.logger.info(f"{self.agent_id} is set to available")
 
-            if result2 == True:
-                self.agent_id.set_available()
+        vi_msg = String()
+        vi_msg.data = visitor_id
+        self.vi_indicator.publish(vi_msg)
+
+        self.logger.info(f"{visitor_id} is indicated by {self.agent_id}")

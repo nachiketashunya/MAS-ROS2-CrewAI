@@ -8,13 +8,13 @@ import json
 
 import sys
 sys.path.append("/home/nachiketa/dup_auto_ass1/src")
-from common_interfaces.src.logger_config import ret_logger
+from common_interfaces.src.logger_config import get_logger
 
 class BIAgentNode(Node):
     def __init__(self):
         super().__init__('bi_agent_node')
 
-        self.logger = ret_logger()
+        self.logger = get_logger(log_file_path="/home/nachiketa/dup_auto_ass1/src/data/events.log")
 
         self.bi_agents = []
         self.callback_groups = []

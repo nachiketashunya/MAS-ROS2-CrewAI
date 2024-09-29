@@ -11,14 +11,14 @@ from filelock import FileLock
 
 import sys
 sys.path.append("/home/nachiketa/dup_auto_ass1/src")
-from common_interfaces.src.logger_config import ret_logger
+from common_interfaces.src.logger_config import get_logger
 from common_interfaces.src.update_json import write_pos_to_json
 
 class CIAgentNode(Node):
     def __init__(self):
         super().__init__('ci_agent_node')
 
-        self.logger = ret_logger()
+        self.logger = get_logger(log_file_path="/home/nachiketa/dup_auto_ass1/src/data/events.log")
         self.ci_agents = []
         self.callback_groups = []
         self.main_callback_group = ReentrantCallbackGroup()
@@ -36,10 +36,13 @@ class CIAgentNode(Node):
                 String, 'ci_to_bi_navigation_request', 10, callback_group=agent_callback_group)
             subscriber = self.create_subscription(
                 String, 'bi_to_ci_navigation_response', self.receive_navigation_response, 10, callback_group=agent_callback_group)
+            
+            vi_indicator = self.create_publisher(String, 'vi_indicator', 10, callback_group=agent_callback_group)
 
             ci_agent = CIAgent(
                 publisher=publisher,
                 subscriber=subscriber,
+                vi_indicator=vi_indicator,
                 agent_id=f"ci_agent_{i+1}",
                 callback_group=agent_callback_group
             )
@@ -70,7 +73,7 @@ class CIAgentNode(Node):
             self.logger.info(f"{agent.agent_id} is guiding {vis_id} to {host}")
             
             confirmation_msg = String()
-            confirmation_msg.data = f"{vis_id}==>{agent.agent_id}"
+            confirmation_msg.data = f"A==>{vis_id}==>{agent.agent_id}"
             self.confirm_vis_req.publish(confirmation_msg)
 
             self.logger.info(f"{agent.agent_id} sent confirmation message to {vis_id}")
@@ -78,7 +81,7 @@ class CIAgentNode(Node):
             agent_thread = threading.Thread(target=self.guide_visitor_thread, args=(agent, vis_id, building, room, host, meeting_time))
             agent_thread.start()
         else:
-            self.logger.info("No available CI Agent")
+            self.logger.info(f"UA==>{vis_id}==>{agent.agent_id}")
 
     def guide_visitor_thread(self, agent, vis_id, building, room, host, meeting_time):
         try:
@@ -93,7 +96,6 @@ class CIAgentNode(Node):
 
         with self.lock:
             for ci_agent in self.ci_agents:
-                print(f"CI AGENT ID: {ci_agent.agent_id} RESPONSE: {response[1]}")
                 if ci_agent.agent_id == response[1]:
                     if response[0] == "Unauthorized":
                         self.logger.info(f"{response[2]} is not authorized to meet the host! Returning to base")
@@ -102,6 +104,12 @@ class CIAgentNode(Node):
                         with self.json_lock:
                             write_pos_to_json(ci_agent.agent_id, 'Campus Entrance', None)
                             write_pos_to_json(response[2], 'Campus Entrance', None)
+
+                            time.sleep(2)
+
+                            write_pos_to_json(ci_agent.agent_id, 'CI Lobby', None)
+                            write_pos_to_json(response[2], 'VI Lobby', None)
+
                     elif response[0] == "Unavailable":
                         self.logger.info(f"Host is unavailable to meet {response[2]}! Returning to base")
                         bi_response = "Unavailable"
@@ -110,6 +118,11 @@ class CIAgentNode(Node):
                             write_pos_to_json(ci_agent.agent_id, 'Campus Entrance', None)
                             write_pos_to_json(response[2], 'Campus Entrance', None)
 
+                            time.sleep(2)
+
+                            write_pos_to_json(ci_agent.agent_id, 'CI Lobby', None)
+                            write_pos_to_json(response[2], 'VI Lobby', None)
+
                     elif response[0] == "OOS":
                         self.logger.info(f"BI Agent is Out of Service! Returning to base")
                         bi_response = "OOS"
@@ -117,6 +130,11 @@ class CIAgentNode(Node):
                         with self.json_lock:
                             write_pos_to_json(ci_agent.agent_id, 'Campus Entrance', None)
                             write_pos_to_json(response[2], 'Campus Entrance', None)
+
+                            time.sleep(2)
+
+                            write_pos_to_json(ci_agent.agent_id, 'CI Lobby', None)
+                            write_pos_to_json(response[2], 'VI Lobby', None)
                     else:
                         path = response[2:].copy()
 

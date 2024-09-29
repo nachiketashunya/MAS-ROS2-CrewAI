@@ -4,7 +4,7 @@ import time
 import sys
 sys.path.append("/home/nachiketa/dup_auto_ass1/src")
 from common_interfaces.src.update_json import write_pos_to_json
-from common_interfaces.src.logger_config import ret_logger
+from common_interfaces.src.logger_config import get_logger
 
 from filelock import FileLock
 
@@ -16,7 +16,7 @@ class NavigateBackToEntranceTool(BaseTool):
         # FileLock for JSON operations
         self._json_lock = FileLock("/home/nachiketa/dup_auto_ass1/src/data/positions.json")
 
-        logger = ret_logger()
+        logger = get_logger(log_file_path="/home/nachiketa/dup_auto_ass1/src/data/events.log")
 
         path_list = navigation_path.split("->")
         for path in reversed(path_list):

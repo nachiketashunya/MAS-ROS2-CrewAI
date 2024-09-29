@@ -1,6 +1,6 @@
 {
     "agents": {
-        "ci_agent_2": {
+        "ci_agent_1": {
             "position": "CI Lobby",
             "navigation_path": []
         },

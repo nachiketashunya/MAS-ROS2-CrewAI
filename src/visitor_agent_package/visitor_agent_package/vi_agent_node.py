@@ -2,7 +2,6 @@ import rclpy
 from rclpy.node import Node
 from std_msgs.msg import String
 from visitor_agent_package.vi_agent import VIAgent
-import json
 import random
 import time
 import threading
@@ -14,102 +13,109 @@ class VIAgentNode(Node):
         super().__init__('vi_agent_node')
 
         self.vi_agents = []
-        self.callback_groups = []  # Store callback groups for agents
+        self.callback_groups = []
         self.assigned_event = threading.Event()
+        self.lock = threading.Lock()
 
-        # Define some hosts for the visitors
         hosts = ['A1', 'A2', 'A3', 'A4', 'B1', 'B2', 'B3', 'C1', 'C2', 'C3', 'C4', 'D1', 'D2']
 
-        # Initialize 5 VI agents with random hosts and callback groups
         for i in range(7):
             agent_callback_group = ReentrantCallbackGroup()
-
-            host = random.choice(hosts)
-            room = f"Room {host}"
-            building = f"Building {host[0]} Entrance"
-            meeting_time = random.randint(60, 180)
-
-            vi_agent = VIAgent(
-                agent_id=f"vi_agent_{i+1}", 
-                building=building, 
-                room=room, 
-                host=host,
-                meeting_time=meeting_time,
-                callback_group=agent_callback_group
-            )
+            vi_agent = self.create_vi_agent(i, hosts, agent_callback_group)
             self.vi_agents.append(vi_agent)
-            self.callback_groups.append(agent_callback_group)  # Track callback groups
+            self.callback_groups.append(agent_callback_group)
 
-        # Publisher to send a request to CI agent for escorting the visitor
         self.request_publisher = self.create_publisher(String, 'vi_to_ci_request', 10)
-
-        # Subscriber to receive confirmation from CI agent that an escort has been assigned
         self.confirmation_subscriber = self.create_subscription(
             String, 
             'ci_to_vi_confirm_res', 
             self.confirmation_res, 
             10
         )
+        self.indicator_subscription = self.create_subscription(
+            String,
+            'vi_indicator',
+            self.handle_indication,
+            10
+        )
+
+    def create_vi_agent(self, i, hosts, callback_group):
+        host = random.choice(hosts)
+        room = f"Room {host}"
+        building = f"Building {host[0]} Entrance"
+        meeting_time = random.randint(60, 180)
+
+        return VIAgent(
+            agent_id=f"vi_agent_{i+1}", 
+            building=building, 
+            room=room, 
+            host=host,
+            meeting_time=meeting_time,
+            callback_group=callback_group
+        )
+
+    def handle_indication(self, msg):
+        vis_id = msg.data
+        with self.lock:
+            for vi_agent in self.vi_agents:
+                if vi_agent.agent_id == vis_id:
+                    # vi_agent.is_ci_assgnd = False
+                    # Reset agent for a new meeting
+                    with self.lock:
+                        hosts = ['A1', 'A2', 'A3', 'A4', 'B1', 'B2', 'B3', 'C1', 'C2', 'C3', 'C4', 'D1', 'D2']
+                        host = random.choice(hosts)
+                        vi_agent.host = host
+                        vi_agent.room = f"Room {host}"
+                        vi_agent.building = f"Building {host[0]} Entrance"
+                        vi_agent.meeting_time = random.randint(30, 90)
+                        self.get_logger().info(f"{vis_id} has finished meeting and is ready for a new request")
+                        
+                        self.request_guidance(vi_agent)
+
+                        break
 
     def request_guidance(self, visitor):
-        """
-        Request CI agent to guide the visitor to the host.
-        """
         data = f"{visitor.agent_id}==>{visitor.building}==>{visitor.room}==>{visitor.host}==>{visitor.meeting_time}"
-
         msg = String()
         msg.data = data
         self.request_publisher.publish(msg)
-        print(f"{visitor.agent_id} requested to meet {visitor.host} for {visitor.meeting_time}seconds.")
+        self.get_logger().info(f"{visitor.agent_id} requested to meet {visitor.host} for {visitor.meeting_time}seconds.")
 
     def confirmation_res(self, msg):
-        """
-        Handle confirmation response from CI agent.
-        """
         data = msg.data.split("==>")
-        vis_id, ci_id = data[0], data[1]
+        status, vis_id, ci_id = data[0], data[1], data[2]
         
-        for vi_agent in self.vi_agents:
-            if vi_agent.agent_id == vis_id:
-                print(f"{ci_id} is assigned to {vis_id}")
-                
-                vi_agent.is_ci_assgnd = True
-                time.sleep(30)
-                self.assigned_event.set()  # Signal that the confirmation has been received
+        if status == "A":
+            with self.lock:
+                for vi_agent in self.vi_agents:
+                    if vi_agent.agent_id == vis_id:
+                        self.get_logger().info(f"{ci_id} is assigned to {vis_id}")
+                        vi_agent.is_ci_assgnd = True
+                        self.assigned_event.set()
+                        break
 
     def process_vi_agents(self):
-        """
-        Handle VI agents one by one, waiting for CI agent confirmation before proceeding to the next.
-        """
-
-
-        while True:
-            vi_agent = random.choice(self.vi_agents)
+        while rclpy.ok():
+            with self.lock:
+                available_agents = [agent for agent in self.vi_agents if not agent.is_ci_assgnd]
             
-            while not vi_agent.is_ci_assgnd:
+            if available_agents:
+                vi_agent = random.choice(available_agents)
                 self.request_guidance(vi_agent)
-                rclpy.spin_once(self, timeout_sec=2)  # Spin to check for messages
-
+                
                 # Wait until confirmation is received before processing the next agent
                 self.assigned_event.wait()
-                self.assigned_event.clear()  # Reset event for next agent
-
-            time.sleep(1)  # Add a delay to simulate processing time
-
+                self.assigned_event.clear()
+            
+            time.sleep(1)  # Add a small delay to prevent tight looping
 
 def main(args=None):
     rclpy.init(args=args)
-
     node = VIAgentNode()
-
-    # Process VI agents
     vi_agent_thread = threading.Thread(target=node.process_vi_agents)
     vi_agent_thread.start()
-
-    # MultiThreadedExecutor to handle the node spinning and callbacks
     executor = MultiThreadedExecutor()
     executor.add_node(node)
-
     try:
         executor.spin()
     except KeyboardInterrupt:

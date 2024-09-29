@@ -5,14 +5,14 @@ import time
 
 import sys
 sys.path.append("/home/nachiketa/dup_auto_ass1/src")
-from common_interfaces.src.logger_config import ret_logger
+from common_interfaces.src.logger_config import get_logger
 
 class RequestBuildingNavigationTool(BaseTool):
     def __init__(self, publisher, subscriber):
         super().__init__(name="Request building navigation tool", description="Tool for requesting BI for building navigation")
         self._publisher = publisher
         self._bi_response = None
-        self._logger = ret_logger()
+        self._logger = get_logger(log_file_path="/home/nachiketa/dup_auto_ass1/src/data/events.log")
 
     def send_request(self, agent_id, visitor_id, building_id, room):   
         msg = String()

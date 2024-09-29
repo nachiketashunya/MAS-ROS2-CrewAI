@@ -6,13 +6,13 @@ from filelock import FileLock
 import sys
 sys.path.append("/home/nachiketa/dup_auto_ass1/src")
 from common_interfaces.src.update_json import write_pos_to_json
-from common_interfaces.src.logger_config import ret_logger
+from common_interfaces.src.logger_config import get_logger
 
 class NavigateToBuildingTool(BaseTool):
     def __init__(self, publisher):
         super().__init__(name="Navigate to Building Tool", description="Tool to navigate")
         self._publisher = publisher
-        self._logger = ret_logger()
+        self._logger = get_logger(log_file_path="/home/nachiketa/dup_auto_ass1/src/data/events.log")
 
     def _run(self, agent_id, visitor_id, building_id):
         # FileLock for JSON operations

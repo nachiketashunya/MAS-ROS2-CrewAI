@@ -3,7 +3,7 @@ import time
 
 import sys
 sys.path.append("/home/nachiketa/dup_auto_ass1/src")
-from common_interfaces.src.logger_config import ret_logger
+from common_interfaces.src.logger_config import get_logger
 
 class EscortToEntranceTask(Task):
     def __init__(self, agent):
@@ -13,7 +13,7 @@ class EscortToEntranceTask(Task):
             agent=agent
         )
 
-        self._logger = ret_logger()
+        self._logger = get_logger("/home/nachiketa/dup_auto_ass1/src/data/events.log")
 
     def execute(self, inputs):
         visitor_id = inputs['visitor_id']
