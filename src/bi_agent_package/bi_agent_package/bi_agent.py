@@ -4,7 +4,7 @@ from bi_agent_package.tools.fetch_nav_tool import FetchNavigationTool
 class BIAgent:
     def __init__(self, agent_id, callback_group):
         self.agent_id = agent_id
-        self.available = True
+        self.is_oos = False
         self.tools = [FetchNavigationTool()]
 
         # Initialize the agent in CrewAI
@@ -17,14 +17,14 @@ class BIAgent:
             tools=self.tools  # Attach tools to the agent
         )
     
-    def set_available(self):
-        self.available = True
+    def set_oos(self):
+        self.is_oos = True
     
-    def set_unavailable(self):
-        self.available = False
+    def set_bis(self):
+        self.is_oos = False
     
-    def is_available(self):
-        return self.available
+    def is_oos(self):
+        return self.is_oos
 
     def define_tasks(self):
         # Define the task of handling navigation requests as a CrewAI Task

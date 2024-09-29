@@ -4,19 +4,26 @@ from std_msgs.msg import String
 from bi_agent_package.bi_agent import BIAgent
 from rclpy.executors import MultiThreadedExecutor
 from rclpy.callback_groups import ReentrantCallbackGroup
+import json
+
+import sys
+sys.path.append("/home/nachiketa/dup_auto_ass1/src")
+from common_interfaces.src.logger_config import ret_logger
 
 class BIAgentNode(Node):
     def __init__(self):
         super().__init__('bi_agent_node')
 
+        self.logger = ret_logger()
+
         self.bi_agents = []
         self.callback_groups = []
 
         # Initialize 3 BI agents with callback groups
-        for i in range(3):
+        for i in ['A', 'B', 'C', 'D']:
             agent_callback_group = ReentrantCallbackGroup()
 
-            bi_agent = BIAgent(agent_id=f"bi_agent_{i+1}", callback_group=agent_callback_group)
+            bi_agent = BIAgent(agent_id=f"bi_agent_{i}", callback_group=agent_callback_group)
             self.bi_agents.append(bi_agent)
             self.callback_groups.append(agent_callback_group)
 
@@ -43,24 +50,39 @@ class BIAgentNode(Node):
         """
         data = msg.data.split("==>")
 
-        print("Received navigation request from CI agent", data)
+        building_id, room_id, ci_agent_id, visitor_id = data[0], data[1], data[2], data[3]
 
-        building_id, room_id, ci_agent_id = data[0], data[1], data[2]
+        self.logger.info(f"Received navigation request from {ci_agent_id}")
 
         # Find an available BI agent to handle the request
-        bi_agent = self.avail_bi_agent()
+        bi_agent = self.get_bia(building_id)
 
-        if bi_agent:
+        building_info = "/home/nachiketa/dup_auto_ass1/src/data/building_info.json"
+    
+        with open(building_info, 'r') as file:
+            data = json.load(file)
+    
+        info = data["buildings"][building_id]["rooms"][room_id]
+
+        if bi_agent.is_oos:
+            self.send_navigation_response(f"OOS->{ci_agent_id}->{visitor_id}")
+
+        elif visitor_id not in info['authorized']:
+            self.send_navigation_response(f"Unauthorized->{ci_agent_id}->{visitor_id}")
+        
+        elif info['available'] == "False":
+            self.send_navigation_response(f"Unavailable->{ci_agent_id}->{visitor_id}")
+        else:
             # Fetch the navigation path using BI agent tools
-            path = bi_agent.tools[0].run(building_id, room_id)
-            path.append(ci_agent_id)  # Add CI agent ID to the end of the path
+            path = info['path']
+
+            path.insert(0, "All OK")
+            path.insert(1, ci_agent_id)
 
             # Format and send the response back to the CI agent
             ret_path = "->".join(path)
-            self.send_navigation_response(ret_path)
-
-        else:
-            print("No available BI agent.")
+            self.send_navigation_response(ret_path)   
+            self.logger.info(f"Navigation reponse sent to {ci_agent_id}")
 
     def send_navigation_response(self, response_data):
         """
@@ -69,17 +91,18 @@ class BIAgentNode(Node):
         msg = String()
         msg.data = response_data
         self.navigation_response_publisher.publish(msg)
-        print("Navigation response sent to CI agent:", response_data)
 
-    def avail_bi_agent(self):
+    def get_bia(self, building_id):
         """
         Find an available BI agent.
         """
-        for bi_agent in self.bi_agents:
-            if bi_agent.is_available():
-                return bi_agent
-        return None
 
+        buil_info = building_id.split(" ")
+        bia = f"bi_agent_{buil_info[1]}"
+
+        for bi_agent in self.bi_agents:
+            if bi_agent.agent_id == bia:
+                return bi_agent
 
 def main(args=None):
     rclpy.init(args=args)

@@ -4,21 +4,38 @@ import time
 import sys
 sys.path.append("/home/nachiketa/dup_auto_ass1/src")
 from common_interfaces.src.update_json import write_pos_to_json
+from common_interfaces.src.logger_config import ret_logger
+
+from filelock import FileLock
 
 class NavigateBackToEntranceTool(BaseTool):
     name: str = "Navigate Back to Entrance Tool"
     description: str = "This tool is for navigation back to entrance."
 
     def _run(self, agent_id, visitor_id, building_id, navigation_path):
-        
-        print("Navigation Path", navigation_path)
-        path_list = navigation_path.split("->")
+        # FileLock for JSON operations
+        self._json_lock = FileLock("/home/nachiketa/dup_auto_ass1/src/data/positions.json")
 
+        logger = ret_logger()
+
+        path_list = navigation_path.split("->")
         for path in reversed(path_list):
             # Update the information
-            write_pos_to_json(agent_id, path, None)
-            time.sleep(2)
+            with self._json_lock:
+                write_pos_to_json(agent_id, path, None)
+                write_pos_to_json(visitor_id, path, None)
+                time.sleep(1)
         
-        write_pos_to_json(agent_id, 'Entrance', None)
+        with self._json_lock:
+            write_pos_to_json(agent_id, 'Campus Entrance', None)
+            write_pos_to_json(visitor_id, 'Campus Entrance', None)
 
-        return f"CI agent is back at the Building Gate"
+            time.sleep(2)
+
+            write_pos_to_json(agent_id, 'CI Lobby', None)
+            write_pos_to_json(visitor_id, 'VI Lobby', None)
+
+        
+        time.sleep(10)
+
+        logger.info(f"{agent_id} is back at the Campus Entrance")

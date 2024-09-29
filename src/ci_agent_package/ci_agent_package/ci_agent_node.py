@@ -7,35 +7,36 @@ from rclpy.executors import MultiThreadedExecutor
 from rclpy.callback_groups import ReentrantCallbackGroup
 from ci_agent_package.ci_agent import CIAgent
 import time
+from filelock import FileLock
 
 import sys
 sys.path.append("/home/nachiketa/dup_auto_ass1/src")
 from common_interfaces.src.logger_config import ret_logger
+from common_interfaces.src.update_json import write_pos_to_json
 
 class CIAgentNode(Node):
     def __init__(self):
         super().__init__('ci_agent_node')
 
         self.logger = ret_logger()
-
         self.ci_agents = []
-        self.callback_groups = []  # Store callback groups for agents
-
-        # Callback group for the main node itself
+        self.callback_groups = []
         self.main_callback_group = ReentrantCallbackGroup()
+        
+        # Lock for thread-safe operations
+        self.lock = threading.Lock()
+        
+        # FileLock for JSON operations
+        self.json_lock = FileLock("/home/nachiketa/dup_auto_ass1/src/data/positions.json")
 
         # Create and manage multiple CIAgents
         for i in range(3):
-            # Create callback group for each agent
             agent_callback_group = ReentrantCallbackGroup()
-
-            # Publisher and Subscriber for each agent
             publisher = self.create_publisher(
                 String, 'ci_to_bi_navigation_request', 10, callback_group=agent_callback_group)
             subscriber = self.create_subscription(
                 String, 'bi_to_ci_navigation_response', self.receive_navigation_response, 10, callback_group=agent_callback_group)
 
-            # Create the CIAgent object
             ci_agent = CIAgent(
                 publisher=publisher,
                 subscriber=subscriber,
@@ -43,31 +44,28 @@ class CIAgentNode(Node):
                 callback_group=agent_callback_group
             )
             self.ci_agents.append(ci_agent)
-            self.callback_groups.append(agent_callback_group)  # Keep track of callback groups
+            self.callback_groups.append(agent_callback_group)
 
-        # Main node publishers and subscribers for visitor requests
         self.confirm_vis_req = self.create_publisher(
             String, 'ci_to_vi_confirm_res', 10, callback_group=self.main_callback_group)
         self.vis_req_subscriber = self.create_subscription(
             String, 'vi_to_ci_request', self.handle_vis_req, 10, callback_group=self.main_callback_group)
 
-        self.navigation_response_received = threading.Event()
+        self.bi_response_received = threading.Event()
         print("CI node Initialization Complete")
 
     def handle_vis_req(self, msg):
-        """
-        Handle visitor requests and assign an available CI agent.
-        """
         data = msg.data.split("==>")
         vis_id, building, room, host, meeting_time = data[0], data[1], data[2], data[3], data[4]
 
         self.logger.info(f"{vis_id} wants to visit {host} in {room} for {meeting_time}seconds")
 
-        # Find an available CI agent
-        agent = self.avail_ci_agent()
+        with self.lock:
+            agent = self.avail_ci_agent()
         
         if agent:
             agent.set_unavailable()
+            agent.total_visitors += 1
 
             self.logger.info(f"{agent.agent_id} is guiding {vis_id} to {host}")
             
@@ -77,33 +75,58 @@ class CIAgentNode(Node):
 
             self.logger.info(f"{agent.agent_id} sent confirmation message to {vis_id}")
             
-            # Guide visitor using agent in its own thread
-            agent_thread = threading.Thread(target=agent.guide_visitor, args=(vis_id, building, room, host))
+            agent_thread = threading.Thread(target=self.guide_visitor_thread, args=(agent, vis_id, building, room, host, meeting_time))
             agent_thread.start()
         else:
             self.logger.info("No available CI Agent")
 
+    def guide_visitor_thread(self, agent, vis_id, building, room, host, meeting_time):
+        try:
+            agent.guide_visitor(vis_id, building, room, host, meeting_time)
+        finally:
+            with self.lock:
+                agent.set_available()
+
     def receive_navigation_response(self, msg):
-        """
-        Receive navigation response from BI agent and update respective CI agent.
-        """
+        response = msg.data.split('->')
+        bi_response = ""
 
-        path = msg.data.split('->')
-        agent_id = path.pop()
+        with self.lock:
+            for ci_agent in self.ci_agents:
+                print(f"CI AGENT ID: {ci_agent.agent_id} RESPONSE: {response[1]}")
+                if ci_agent.agent_id == response[1]:
+                    if response[0] == "Unauthorized":
+                        self.logger.info(f"{response[2]} is not authorized to meet the host! Returning to base")
+                        bi_response = "Unauthorized"
 
-        self.logger.info(f"{agent_id} received navigation reponse")
-        # Find the agent with the correct ID and update its navigation path
-        for ci_agent in self.ci_agents:
-            if ci_agent.agent_id == agent_id:
-                nav_path = "->".join(path)
-                ci_agent.update_navigation_path(nav_path)
-                self.navigation_response_received.set()
-                break
+                        with self.json_lock:
+                            write_pos_to_json(ci_agent.agent_id, 'Campus Entrance', None)
+                            write_pos_to_json(response[2], 'Campus Entrance', None)
+                    elif response[0] == "Unavailable":
+                        self.logger.info(f"Host is unavailable to meet {response[2]}! Returning to base")
+                        bi_response = "Unavailable"
+
+                        with self.json_lock:
+                            write_pos_to_json(ci_agent.agent_id, 'Campus Entrance', None)
+                            write_pos_to_json(response[2], 'Campus Entrance', None)
+
+                    elif response[0] == "OOS":
+                        self.logger.info(f"BI Agent is Out of Service! Returning to base")
+                        bi_response = "OOS"
+
+                        with self.json_lock:
+                            write_pos_to_json(ci_agent.agent_id, 'Campus Entrance', None)
+                            write_pos_to_json(response[2], 'Campus Entrance', None)
+                    else:
+                        path = response[2:].copy()
+
+                        self.logger.info(f"{ci_agent.agent_id} received navigation response")
+                        bi_response = "->".join(path)
+
+                    ci_agent.update_bi_response(bi_response)
+                    self.bi_response_received.set()
 
     def avail_ci_agent(self):
-        """
-        Find an available CI agent.
-        """
         for ci_agent in self.ci_agents:
             if ci_agent.is_available():
                 return ci_agent
@@ -111,11 +134,7 @@ class CIAgentNode(Node):
 
 def main(args=None):
     rclpy.init(args=args)
-
-    # Initialize the CI agent node (manager)
     node = CIAgentNode()
-
-    # MultiThreadedExecutor for handling node callbacks
     executor = MultiThreadedExecutor()
     executor.add_node(node)
 

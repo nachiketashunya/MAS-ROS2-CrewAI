@@ -3,55 +3,81 @@
       "Building A Entrance": {
         "rooms": {
           "Room A1": {
-            "path": ["Building A Entrance", "Room A1"]
+            "path": ["Building A Entrance", "Room A1"],
+            "available": "True",
+            "authorized": ["vi_agent_1", "vi_agent_2", "vi_agent_4", "vi_agent_5", "vi_agent_6", "vi_agent_7"]
           },
           "Room A2": {
-            "path": ["Building A Entrance", "Room A2"]
+            "path": ["Building A Entrance", "Room A2"],
+            "available": "True",
+            "authorized": ["vi_agent_1", "vi_agent_2", "vi_agent_3", "vi_agent_4", "vi_agent_5", "vi_agent_7"]
           },
           "Room A3": {
-            "path": ["Building A Entrance", "Room A3"]
+            "path": ["Building A Entrance", "Room A3"],
+            "available": "False",
+            "authorized": ["vi_agent_1", "vi_agent_2", "vi_agent_3", "vi_agent_4", "vi_agent_5", "vi_agent_6", "vi_agent_7"]
           },
           "Room A4": {
-            "path": ["Building A Entrance", "Room A4"]
+            "path": ["Building A Entrance", "Room A4"],
+            "available": "True",
+            "authorized": ["vi_agent_1", "vi_agent_3", "vi_agent_4", "vi_agent_5", "vi_agent_6", "vi_agent_7"]
           }
         }
       },
       "Building B Entrance": {
         "rooms": {
           "Room B1": {
-            "path": ["Building B Entrance", "Room B1"]
+            "path": ["Building B Entrance", "Room B1"],
+            "available": "True",
+            "authorized": ["vi_agent_1", "vi_agent_2", "vi_agent_3", "vi_agent_4", "vi_agent_5", "vi_agent_6", "vi_agent_7"]
           },
           "Room B2": {
-            "path": ["Building B Entrance", "Room B2"]
+            "path": ["Building B Entrance", "Room B2"],
+            "available": "False",
+            "authorized": ["vi_agent_1", "vi_agent_2", "vi_agent_3", "vi_agent_5", "vi_agent_6", "vi_agent_7"]
           },
           "Room B3": {
-            "path": ["Building B Entrance", "Room B3"]
+            "path": ["Building B Entrance", "Room B3"],
+            "available": "True",
+            "authorized": ["vi_agent_2", "vi_agent_3", "vi_agent_4", "vi_agent_5", "vi_agent_6", "vi_agent_7"]
           }
         }
       },
       "Building C Entrance": {
         "rooms": {
           "Room C1": {
-            "path": ["Building C Entrance", "Room C1"]
+            "path": ["Building C Entrance", "Room C1"],
+            "available": "True",
+            "authorized": ["vi_agent_1", "vi_agent_2", "vi_agent_3", "vi_agent_4", "vi_agent_6", "vi_agent_7"]
           },
           "Room C2": {
-            "path": ["Building C Entrance", "Room C2"]
+            "path": ["Building C Entrance", "Room C2"],
+            "available": "False",
+            "authorized": ["vi_agent_1", "vi_agent_2", "vi_agent_3", "vi_agent_4", "vi_agent_5", "vi_agent_7"]
           },
           "Room C3": {
-            "path": ["Building C Entrance", "Room C3"]
+            "path": ["Building C Entrance", "Room C3"],
+            "available": "True",
+            "authorized": ["vi_agent_1", "vi_agent_2", "vi_agent_3", "vi_agent_5", "vi_agent_6", "vi_agent_7"]
           },
           "Room C4": {
-            "path": ["Building C Entrance", "Room C4"]
+            "path": ["Building C Entrance", "Room C4"],
+            "available": "True",
+            "authorized": ["vi_agent_1", "vi_agent_2", "vi_agent_3", "vi_agent_4", "vi_agent_5", "vi_agent_6"]
           }
         }
       },
       "Building D Entrance": {
         "rooms": {
           "Room D1": {
-            "path": ["Building D Entrance", "Room D1"]
+            "path": ["Building D Entrance", "Room D1"],
+            "available": "True",
+            "authorized": ["vi_agent_1", "vi_agent_3", "vi_agent_4", "vi_agent_5", "vi_agent_6", "vi_agent_7"]
           },
           "Room D2": {
-            "path": ["Building D Entrance", "Room D2"]
+            "path": ["Building D Entrance", "Room D2"],
+            "available": "False",
+            "authorized": ["vi_agent_1", "vi_agent_2", "vi_agent_3", "vi_agent_4", "vi_agent_5", "vi_agent_6", "vi_agent_7"]
           }
         }
       }

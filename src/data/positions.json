@@ -1,58 +1,10 @@
 {
     "agents": {
-        "ci_agent_1": {
-            "position": "Building D Entrance",
-            "navigation_path": []
-        },
         "ci_agent_2": {
-            "position": "Building A Entrance",
-            "navigation_path": []
-        },
-        "ci_agent_3": {
-            "position": "Building B Entrance",
-            "navigation_path": []
-        },
-        "bi_agent_A": {
-            "position": "Building A Entrance",
-            "navigation_path": []
-        },
-        "bi_agent_B": {
-            "position": "Building B Entrance",
-            "navigation_path": []
-        },
-        "bi_agent_C": {
-            "position": "Building C Entrance",
-            "navigation_path": []
-        },
-        "bi_agent_D": {
-            "position": "Building D Entrance",
-            "navigation_path": []
-        },
-        "vi_agent_1": {
-            "position": "VI Lobby",
-            "navigation_path": []
-        },
-        "vi_agent_2": {
-            "position": "VI Lobby",
-            "navigation_path": []
-        },
-        "vi_agent_3": {
-            "position": "VI Lobby",
+            "position": "CI Lobby",
             "navigation_path": []
         },
         "vi_agent_4": {
-            "position": "VI Lobby",
-            "navigation_path": []
-        },
-        "vi_agent_5": {
-            "position": "VI Lobby",
-            "navigation_path": []
-        },
-        "vi_agent_6": {
-            "position": "VI Lobby",
-            "navigation_path": []
-        },
-        "vi_agent_7": {
             "position": "VI Lobby",
             "navigation_path": []
         }

@@ -13,17 +13,20 @@ class EscortToHostTask(Task):
         building_id = inputs['building_id']
         agent_id = inputs['agent_id']
         room = inputs['room']
+        meeting_time = inputs['meeting_time']
+        host = inputs['host']
         
         # Phase 1: Guide to building entrance
-        result = self.agent.tools[0].run(agent_id, visitor_id, building_id)
-        print(result)
+        self.agent.tools[0].run(agent_id, visitor_id, building_id)
 
         # Phase 2: Request navigation from BI agent
-        navigation_path = self.agent.tools[1].run(agent_id, visitor_id, building_id, room)
-        print(navigation_path)
+        bi_response = self.agent.tools[1].run(agent_id, visitor_id, building_id, room)
+        
+        if bi_response in ['Unauthorized', 'Unavailable', 'OOS']:
+            return False
 
         # Phase 3: Guide to host
-        result = self.agent.tools[2].run(agent_id, visitor_id, building_id, navigation_path)
-        print(result)
+        self.agent.tools[2].run(agent_id, visitor_id, building_id, bi_response)
 
-        return navigation_path
+        return bi_response
+

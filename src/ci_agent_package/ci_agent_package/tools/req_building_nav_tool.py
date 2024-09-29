@@ -3,33 +3,34 @@ import json
 from std_msgs.msg import String
 import time
 
+import sys
+sys.path.append("/home/nachiketa/dup_auto_ass1/src")
+from common_interfaces.src.logger_config import ret_logger
+
 class RequestBuildingNavigationTool(BaseTool):
     def __init__(self, publisher, subscriber):
         super().__init__(name="Request building navigation tool", description="Tool for requesting BI for building navigation")
         self._publisher = publisher
-        self._navigation_path = None
+        self._bi_response = None
+        self._logger = ret_logger()
 
     def send_request(self, agent_id, visitor_id, building_id, room):   
         msg = String()
         # msg.data = req_data_str
-        msg.data = f"{building_id}==>{room}==>{agent_id}"
+        msg.data = f"{building_id}==>{room}==>{agent_id}==>{visitor_id}"
 
         self._publisher.publish(msg)
-        print(f"{agent_id} published navigation request for {visitor_id} to {building_id}.")
+        self._logger.info(f"{agent_id} published navigation request for {visitor_id} to {building_id}.")
 
-    def set_navigation_path(self, navigation_path):
-        print("Nav Path: ", navigation_path)
-        self._navigation_path = navigation_path
+    def set_bi_response(self, bi_response):
+        self._bi_response = bi_response
 
     def _run(self, agent_id, visitor_id, building_id, room):
-        self._navigation_path = None
+        self._bi_response = None
 
-        # Wait for a response from BI agent
-        print("Waiting for navigation response...")
-        while self._navigation_path is None:
+        while self._bi_response is None:
             self.send_request(agent_id, visitor_id, building_id, room)
-            print(f"Sent the navigation request to BI Agent")
-            print("Waiting for the navigation response")
+            self._logger.info(f"{agent_id} is waiting for the BI response")
             time.sleep(60)
         
-        return self._navigation_path
+        return self._bi_response

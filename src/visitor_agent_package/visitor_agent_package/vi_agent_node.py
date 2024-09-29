@@ -81,7 +81,11 @@ class VIAgentNode(Node):
         """
         Handle VI agents one by one, waiting for CI agent confirmation before proceeding to the next.
         """
-        for vi_agent in self.vi_agents:
+
+
+        while True:
+            vi_agent = random.choice(self.vi_agents)
+            
             while not vi_agent.is_ci_assgnd:
                 self.request_guidance(vi_agent)
                 rclpy.spin_once(self, timeout_sec=2)  # Spin to check for messages

@@ -13,6 +13,7 @@ from watchdog.observers import Observer
 import numpy as np
 from watchdog.events import FileSystemEventHandler
 from math import cos, sin
+from collections import defaultdict
 
 class JSONFileHandler(FileSystemEventHandler):
     def __init__(self, callback):
@@ -31,6 +32,12 @@ class GraphManager:
         self.setup_dash_layout()
         self.json_file = "/home/nachiketa/dup_auto_ass1/src/data/positions.json"  # Update this path as needed
         self.last_modified_time = 0
+
+        self.agent_base_sizes = {
+            'ci': 40,
+            'vi': 26,
+            'bi': 18
+        }
 
         # Define agents with positions and symbols
         self.agents = {
@@ -92,26 +99,11 @@ class GraphManager:
         pos['CI Lobby'] = (-7, -2)
         pos['VI Lobby'] = (-7, 2)
         
-        building_positions = {
-            'Building A': (-5, 5),
-            'Building B': (5, 5),
-            'Building C': (-5, -5),
-            'Building D': (5, -5)
-        }
-
-        buildings = {
-            'Building A': ['Room A1', 'Room A2', 'Room A3', 'Room A4'],
-            'Building B': ['Room B1', 'Room B2', 'Room B3'],
-            'Building C': ['Room C1', 'Room C2', 'Room C3', 'Room C4'],
-            'Building D': ['Room D1', 'Room D2']
-        }
-        
         pos['Building A Entrance'] = (-5, 5)
         pos['Room A1'] = (-6, 6)
         pos['Room A2'] = (-6, 4)
         pos['Room A3'] = (-4, 6)
         pos['Room A4'] = (-4, 4)
-
 
         pos['Building B Entrance'] = (5, 5)
         pos['Room B1'] = (6, 6)
@@ -127,37 +119,6 @@ class GraphManager:
         pos['Building D Entrance'] = (5, -5)
         pos['Room D1'] = (6, -6)
         pos['Room D2'] = (4, -4)
-       
-        # # Define the size of the rectangle around the building (1.5 units left, right, up, down)
-        # building_box_size = 5.0  # The width/height of the rectangle around the building (1.5 units on each side)
-        
-        # for building, (x, y) in building_positions.items():
-        #     entrance = f"{building} Entrance"
-            
-        #     # Place the entrance at the top of the rectangle
-        #     pos[entrance] = (x, y + building_box_size / 2)
-            
-        #     # Get the rooms corresponding to the building
-        #     rooms = buildings[building]
-        #     room_count = len(rooms)
-            
-        #     # Calculate grid dimensions based on the number of rooms
-        #     cols = int(room_count ** 0.5) + 1  # Adjust the number of columns for room placement
-        #     rows = (room_count + cols - 1) // cols  # Calculate the number of rows
-            
-        #     # Calculate the spacing between rooms based on the size of the building box
-        #     spacing_x = building_box_size / cols
-        #     spacing_y = building_box_size / rows
-            
-        #     for i, room in enumerate(rooms):
-        #         row = i // cols
-        #         col = i % cols
-                
-        #         # Calculate the x and y positions within the rectangle for the rooms
-        #         room_x = x - building_box_size / 2 + col * spacing_x + spacing_x / 2
-        #         room_y = y - building_box_size / 2 + row * spacing_y + spacing_y / 2
-                
-        #         pos[room] = (room_x, room_y)
         
         return pos
 
@@ -351,6 +312,12 @@ class GraphManager:
 
     def get_agent_traces(self):
         agent_traces = []
+        position_counts = defaultdict(int)
+        
+        # First, count how many agents are at each position
+        for agent, info in self.agents.items():
+            position_counts[info['pos']] += 1
+        
         for agent, info in self.agents.items():
             if info['pos'] in ['CI Lobby', 'VI Lobby']:
                 # Randomly position agents within the lobby
@@ -360,12 +327,20 @@ class GraphManager:
             else:
                 x, y = self.pos[info['pos']]
             
+            # Determine the agent type (ci, vi, or bi)
+            agent_type = agent.split('_')[0]
+            
+            # Calculate size based on the number of agents at this position
+            base_size = self.agent_base_sizes.get(agent_type, 10)
+            size_factor = 1 / (position_counts[info['pos']] ** 0.5)  # Square root scaling
+            adjusted_size = max(base_size * size_factor, 5)  # Ensure minimum size of 5
+            
             agent_trace = go.Scatter(
                 x=[x], y=[y],
                 mode='markers',
                 marker=dict(
                     symbol=info['symbol'],
-                    size=15,
+                    size=adjusted_size,
                     color=info['color'],
                     line=dict(width=2, color='DarkSlateGrey')
                 ),
@@ -475,4 +450,21 @@ class GraphManager:
 
 if __name__ == "__main__":
     manager = GraphManager()
+    # Load the existing JSON file content
+    json_file_path = manager.json_file
+
+    with open(json_file_path, 'r') as f:
+        data = json.load(f)
+
+    # Update the positions in the JSON file using the new agent data
+    for agent_id, agent_data in manager.agents.items():
+        if agent_id in data['agents']:
+            data['agents'][agent_id]['position'] = agent_data['pos']
+
+    # Write the updated content back to the JSON file
+    with open(json_file_path, 'w') as f:
+        json.dump(data, f, indent=4)
+
+    print("JSON file updated successfully.")
+
     manager.run()
