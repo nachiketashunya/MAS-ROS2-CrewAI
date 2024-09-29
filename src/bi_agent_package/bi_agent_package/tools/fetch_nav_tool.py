@@ -12,6 +12,7 @@ class FetchNavigationTool(BaseTool):
             with open(building_info, 'r') as file:
                 data = json.load(file)
             # Access the path of the specific room within the specified building
+            
             path = data["buildings"][building_id]["rooms"][room]["path"]
             
         except KeyError:

@@ -18,21 +18,23 @@ class VIAgentNode(Node):
         self.assigned_event = threading.Event()
 
         # Define some hosts for the visitors
-        hosts = ['A1', 'A2', 'A3', 'B1', 'B2', 'C1', 'C2', 'C3', 'C4']
+        hosts = ['A1', 'A2', 'A3', 'A4', 'B1', 'B2', 'B3', 'C1', 'C2', 'C3', 'C4', 'D1', 'D2']
 
         # Initialize 5 VI agents with random hosts and callback groups
-        for i in range(5):
+        for i in range(7):
             agent_callback_group = ReentrantCallbackGroup()
 
             host = random.choice(hosts)
             room = f"Room {host}"
-            building = f"Building {host[0]}"
+            building = f"Building {host[0]} Entrance"
+            meeting_time = random.randint(60, 180)
 
             vi_agent = VIAgent(
                 agent_id=f"vi_agent_{i+1}", 
                 building=building, 
                 room=room, 
                 host=host,
+                meeting_time=meeting_time,
                 callback_group=agent_callback_group
             )
             self.vi_agents.append(vi_agent)
@@ -53,24 +55,26 @@ class VIAgentNode(Node):
         """
         Request CI agent to guide the visitor to the host.
         """
-        data = f"{visitor.agent_id}==>{visitor.building}==>{visitor.room}==>{visitor.host}"
+        data = f"{visitor.agent_id}==>{visitor.building}==>{visitor.room}==>{visitor.host}==>{visitor.meeting_time}"
 
         msg = String()
         msg.data = data
         self.request_publisher.publish(msg)
-        print(f"VI Agent {visitor.agent_id} requested guidance to {visitor.host}.")
+        print(f"{visitor.agent_id} requested to meet {visitor.host} for {visitor.meeting_time}seconds.")
 
     def confirmation_res(self, msg):
         """
         Handle confirmation response from CI agent.
         """
-        print("Confirmation Response Received")
-        vis_id = msg.data
+        data = msg.data.split("==>")
+        vis_id, ci_id = data[0], data[1]
+        
         for vi_agent in self.vi_agents:
             if vi_agent.agent_id == vis_id:
-                print(f"CI Assigned to {vi_agent.agent_id}")
+                print(f"{ci_id} is assigned to {vis_id}")
+                
                 vi_agent.is_ci_assgnd = True
-                time.sleep(120)
+                time.sleep(30)
                 self.assigned_event.set()  # Signal that the confirmation has been received
 
     def process_vi_agents(self):

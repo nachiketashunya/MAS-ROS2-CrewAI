@@ -8,9 +8,15 @@ from rclpy.callback_groups import ReentrantCallbackGroup
 from ci_agent_package.ci_agent import CIAgent
 import time
 
+import sys
+sys.path.append("/home/nachiketa/dup_auto_ass1/src")
+from common_interfaces.src.logger_config import ret_logger
+
 class CIAgentNode(Node):
     def __init__(self):
         super().__init__('ci_agent_node')
+
+        self.logger = ret_logger()
 
         self.ci_agents = []
         self.callback_groups = []  # Store callback groups for agents
@@ -53,9 +59,9 @@ class CIAgentNode(Node):
         Handle visitor requests and assign an available CI agent.
         """
         data = msg.data.split("==>")
-        vis_id, building, room, host = data[0], data[1], data[2], data[3]
+        vis_id, building, room, host, meeting_time = data[0], data[1], data[2], data[3], data[4]
 
-        print(f"Visitor ID: {vis_id} wants to visit HOST: {host} in {room}, {building}")
+        self.logger.info(f"{vis_id} wants to visit {host} in {room} for {meeting_time}seconds")
 
         # Find an available CI agent
         agent = self.avail_ci_agent()
@@ -63,27 +69,29 @@ class CIAgentNode(Node):
         if agent:
             agent.set_unavailable()
 
-            print(f"{agent.agent_id} is guiding {vis_id} to {host}")
+            self.logger.info(f"{agent.agent_id} is guiding {vis_id} to {host}")
             
             confirmation_msg = String()
-            confirmation_msg.data = vis_id
+            confirmation_msg.data = f"{vis_id}==>{agent.agent_id}"
             self.confirm_vis_req.publish(confirmation_msg)
-            print("Confirmation Message Published")
+
+            self.logger.info(f"{agent.agent_id} sent confirmation message to {vis_id}")
             
             # Guide visitor using agent in its own thread
             agent_thread = threading.Thread(target=agent.guide_visitor, args=(vis_id, building, room, host))
             agent_thread.start()
         else:
-            print("No available CI agent.")
+            self.logger.info("No available CI Agent")
 
     def receive_navigation_response(self, msg):
         """
         Receive navigation response from BI agent and update respective CI agent.
         """
-        print("Navigation Response Received")
+
         path = msg.data.split('->')
         agent_id = path.pop()
 
+        self.logger.info(f"{agent_id} received navigation reponse")
         # Find the agent with the correct ID and update its navigation path
         for ci_agent in self.ci_agents:
             if ci_agent.agent_id == agent_id:

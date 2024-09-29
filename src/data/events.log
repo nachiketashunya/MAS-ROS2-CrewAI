@@ -1,0 +1,11 @@
+2024-09-29 23:25:54,360 - shared_logger - INFO - vi_agent_1 wants to visit D1 in Room D1 for 134seconds
+2024-09-29 23:25:54,361 - shared_logger - INFO - ci_agent_1 is guiding vi_agent_1 to D1
+2024-09-29 23:25:54,362 - shared_logger - INFO - ci_agent_1 sent confirmation message to vi_agent_1
+2024-09-29 23:26:25,376 - shared_logger - INFO - vi_agent_2 wants to visit A1 in Room A1 for 108seconds
+2024-09-29 23:26:25,379 - shared_logger - INFO - ci_agent_2 is guiding vi_agent_2 to A1
+2024-09-29 23:26:25,380 - shared_logger - INFO - ci_agent_2 sent confirmation message to vi_agent_2
+2024-09-29 23:26:56,417 - shared_logger - INFO - vi_agent_3 wants to visit B3 in Room B3 for 160seconds
+2024-09-29 23:26:56,417 - shared_logger - INFO - ci_agent_3 is guiding vi_agent_3 to B3
+2024-09-29 23:26:56,418 - shared_logger - INFO - ci_agent_3 sent confirmation message to vi_agent_3
+2024-09-29 23:27:27,452 - shared_logger - INFO - vi_agent_4 wants to visit C4 in Room C4 for 154seconds
+2024-09-29 23:27:27,452 - shared_logger - INFO - No available CI Agent

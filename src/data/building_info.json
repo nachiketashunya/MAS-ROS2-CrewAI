@@ -1,41 +1,57 @@
 {
     "buildings": {
-      "Building A": {
+      "Building A Entrance": {
         "rooms": {
           "Room A1": {
-            "path": ["Building A", "Room A1"]
+            "path": ["Building A Entrance", "Room A1"]
           },
           "Room A2": {
-            "path": ["Building A", "Room A2"]
+            "path": ["Building A Entrance", "Room A2"]
           },
           "Room A3": {
-            "path": ["Building A", "Room A3"]
+            "path": ["Building A Entrance", "Room A3"]
+          },
+          "Room A4": {
+            "path": ["Building A Entrance", "Room A4"]
           }
         }
       },
-      "Building B": {
+      "Building B Entrance": {
         "rooms": {
           "Room B1": {
-            "path": ["Building B", "Room B1"]
+            "path": ["Building B Entrance", "Room B1"]
           },
           "Room B2": {
-            "path": ["Building B", "Room B2"]
+            "path": ["Building B Entrance", "Room B2"]
+          },
+          "Room B3": {
+            "path": ["Building B Entrance", "Room B3"]
           }
         }
       },
-      "Building C": {
+      "Building C Entrance": {
         "rooms": {
           "Room C1": {
-            "path": ["Building C", "Room C1"]
+            "path": ["Building C Entrance", "Room C1"]
           },
           "Room C2": {
-            "path": ["Building C", "Room C2"]
+            "path": ["Building C Entrance", "Room C2"]
           },
           "Room C3": {
-            "path": ["Building C", "Room C3"]
+            "path": ["Building C Entrance", "Room C3"]
           },
           "Room C4": {
-            "path": ["Building C", "Room C4"]
+            "path": ["Building C Entrance", "Room C4"]
+          }
+        }
+      },
+      "Building D Entrance": {
+        "rooms": {
+          "Room D1": {
+            "path": ["Building D Entrance", "Room D1"]
+          },
+          "Room D2": {
+            "path": ["Building D Entrance", "Room D2"]
           }
         }
       }

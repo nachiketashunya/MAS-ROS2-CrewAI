@@ -6,8 +6,8 @@ sys.path.append("/home/nachiketa/dup_auto_ass1/src")
 from common_interfaces.src.update_json import write_pos_to_json
 
 class NavigateBackToEntranceTool(BaseTool):
-    name: str = "Navigate to Building Tool"
-    description: str = "This tool is for navigation to building of visitor."
+    name: str = "Navigate Back to Entrance Tool"
+    description: str = "This tool is for navigation back to entrance."
 
     def _run(self, agent_id, visitor_id, building_id, navigation_path):
         
