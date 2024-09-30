@@ -5,6 +5,7 @@ from bi_agent_package.bi_agent import BIAgent
 from rclpy.executors import MultiThreadedExecutor
 from rclpy.callback_groups import ReentrantCallbackGroup
 import json
+import random
 
 import sys
 sys.path.append("/home/nachiketa/dup_auto_ass1/src")
@@ -50,7 +51,7 @@ class BIAgentNode(Node):
         """
         data = msg.data.split("==>")
 
-        building_id, room_id, ci_agent_id, visitor_id = data[0], data[1], data[2], data[3]
+        building_id, room_id, ci_agent_id, visitor_id, meeting_time = data[0], data[1], data[2], data[3], data[4]
 
         self.logger.info(f"Received navigation request from {ci_agent_id}")
 
@@ -64,25 +65,51 @@ class BIAgentNode(Node):
     
         info = data["buildings"][building_id]["rooms"][room_id]
 
-        if bi_agent.is_oos:
-            self.send_navigation_response(f"OOS->{ci_agent_id}->{visitor_id}")
-
-        elif visitor_id not in info['authorized']:
-            self.send_navigation_response(f"Unauthorized->{ci_agent_id}->{visitor_id}")
-        
-        elif info['available'] == "False":
-            self.send_navigation_response(f"Unavailable->{ci_agent_id}->{visitor_id}")
-        else:
+        if building_id == room_id:
             # Fetch the navigation path using BI agent tools
             path = info['path']
 
             path.insert(0, "All OK")
             path.insert(1, ci_agent_id)
+            path.insert(2, visitor_id)
 
             # Format and send the response back to the CI agent
             ret_path = "->".join(path)
             self.send_navigation_response(ret_path)   
-            self.logger.info(f"Navigation reponse sent to {ci_agent_id}")
+            self.logger.info(f"Navigation response sent to {ci_agent_id}")
+
+            bi_agent.set_oos()
+            self.logger.info(f"{bi_agent.agent_id} is Out of Service for {meeting_time}seconds")
+
+            bi_agent.oos_duration = max(int(meeting_time) + random.randint(-20, 20), 0)
+
+            if bi_agent.oos_duration > int(meeting_time):
+                bi_agent.total_violations += 1
+
+        else:
+            if bi_agent.is_oos:
+                self.send_navigation_response(f"OOS->{ci_agent_id}->{visitor_id}")
+
+            elif visitor_id not in info['authorized']:
+                self.send_navigation_response(f"Unauthorized->{ci_agent_id}->{visitor_id}")
+            
+            elif info['available'] == "False":
+                self.send_navigation_response(f"Unavailable->{ci_agent_id}->{visitor_id}")
+            else:
+                # Fetch the navigation path using BI agent tools
+                path = info['path']
+
+                path.insert(0, "All OK")
+                path.insert(1, ci_agent_id)
+                path.insert(2, visitor_id)
+
+                # Format and send the response back to the CI agent
+                ret_path = "->".join(path)
+                self.send_navigation_response(ret_path)   
+                self.logger.info(f"Navigation reponse sent to {ci_agent_id}")
+
+                bi_agent.total_cis += 1
+                self.logger.info(f"Total CIs Guided by {bi_agent.agent_id}: {bi_agent.total_cis}")
 
     def send_navigation_response(self, response_data):
         """

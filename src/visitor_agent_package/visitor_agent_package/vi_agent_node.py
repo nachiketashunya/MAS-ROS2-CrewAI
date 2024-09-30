@@ -6,7 +6,7 @@ import random
 import time
 import threading
 from rclpy.executors import MultiThreadedExecutor
-from rclpy.callback_groups import ReentrantCallbackGroup
+from rclpy.callback_groups import ReentrantCallbackGroup, MutuallyExclusiveCallbackGroup
 
 class VIAgentNode(Node):
     def __init__(self):
@@ -26,17 +26,23 @@ class VIAgentNode(Node):
             self.callback_groups.append(agent_callback_group)
 
         self.request_publisher = self.create_publisher(String, 'vi_to_ci_request', 10)
+        
+        # Use MutuallyExclusiveCallbackGroup for subscriptions
+        subscription_callback_group = MutuallyExclusiveCallbackGroup()
+        
         self.confirmation_subscriber = self.create_subscription(
             String, 
             'ci_to_vi_confirm_res', 
             self.confirmation_res, 
-            10
+            10,
+            callback_group=subscription_callback_group
         )
         self.indicator_subscription = self.create_subscription(
             String,
             'vi_indicator',
             self.handle_indication,
-            10
+            10,
+            callback_group=subscription_callback_group
         )
 
     def create_vi_agent(self, i, hosts, callback_group):
@@ -61,18 +67,26 @@ class VIAgentNode(Node):
                 if vi_agent.agent_id == vis_id:
                     # vi_agent.is_ci_assgnd = False
                     # Reset agent for a new meeting
-                    with self.lock:
-                        hosts = ['A1', 'A2', 'A3', 'A4', 'B1', 'B2', 'B3', 'C1', 'C2', 'C3', 'C4', 'D1', 'D2']
-                        host = random.choice(hosts)
-                        vi_agent.host = host
-                        vi_agent.room = f"Room {host}"
-                        vi_agent.building = f"Building {host[0]} Entrance"
-                        vi_agent.meeting_time = random.randint(30, 90)
-                        self.get_logger().info(f"{vis_id} has finished meeting and is ready for a new request")
-                        
-                        self.request_guidance(vi_agent)
+                    hosts = ['A1', 'A2', 'A3', 'A4', 'B1', 'B2', 'B3', 'C1', 'C2', 'C3', 'C4', 'D1', 'D2']
+                    host = random.choice(hosts)
+                
+                    output = random.choices([0, 1], weights=[70, 30], k=1)[0]
+                    
+                    vi_agent.room = f"Room {host}"
+                    vi_agent.host = host
 
-                        break
+                    if output == 1:
+                        vi_agent.room = f"Building {host[0]} Entrance"
+                        vi_agent.host = f"bi_agent_{host[0]}"
+
+                    vi_agent.building = f"Building {host[0]} Entrance"
+                    vi_agent.meeting_time = random.randint(30, 90)
+                    self.get_logger().info(f"{vis_id} has finished meeting and is ready for a new request")
+                    
+                    if vi_agent.req_count < 3:
+                        self.request_guidance(vi_agent)
+                        vi_agent.req_count += 1
+
 
     def request_guidance(self, visitor):
         data = f"{visitor.agent_id}==>{visitor.building}==>{visitor.room}==>{visitor.host}==>{visitor.meeting_time}"
@@ -93,6 +107,12 @@ class VIAgentNode(Node):
                         vi_agent.is_ci_assgnd = True
                         self.assigned_event.set()
                         break
+        else:
+            self.get_logger().info(f"Assigned event is reset")
+            self.assigned_event.set()
+
+        # Remove the sleep here
+        # time.sleep(20)
 
     def process_vi_agents(self):
         while rclpy.ok():
@@ -101,11 +121,14 @@ class VIAgentNode(Node):
             
             if available_agents:
                 vi_agent = random.choice(available_agents)
-                self.request_guidance(vi_agent)
+
+                if vi_agent.req_count < 3:
+                    self.request_guidance(vi_agent)
+                    vi_agent.req_count += 1
                 
-                # Wait until confirmation is received before processing the next agent
-                self.assigned_event.wait()
-                self.assigned_event.clear()
+                    # Wait until confirmation is received before processing the next agent
+                    self.assigned_event.wait()
+                    self.assigned_event.clear()
             
             time.sleep(1)  # Add a small delay to prevent tight looping
 

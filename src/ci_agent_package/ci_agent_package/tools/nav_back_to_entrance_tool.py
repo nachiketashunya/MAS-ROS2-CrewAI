@@ -18,13 +18,14 @@ class NavigateBackToEntranceTool(BaseTool):
 
         logger = get_logger(log_file_path="/home/nachiketa/dup_auto_ass1/src/data/events.log")
 
-        path_list = navigation_path.split("->")
-        for path in reversed(path_list):
-            # Update the information
-            with self._json_lock:
-                write_pos_to_json(agent_id, path, None)
-                write_pos_to_json(visitor_id, path, None)
-                time.sleep(1)
+        if navigation_path is not None:
+            path_list = navigation_path.split("->")
+            for path in reversed(path_list):
+                # Update the information
+                with self._json_lock:
+                    write_pos_to_json(agent_id, path, None)
+                    write_pos_to_json(visitor_id, path, None)
+                    time.sleep(1)
         
         with self._json_lock:
             write_pos_to_json(agent_id, 'Campus Entrance', None)

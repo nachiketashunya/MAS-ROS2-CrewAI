@@ -12,6 +12,9 @@ from common_interfaces.src.update_json import write_pos_to_json
 from common_interfaces.src.logger_config import get_logger
 
 from std_msgs.msg import String
+from filelock import FileLock
+
+import time
 
 
 class CIAgent:
@@ -25,8 +28,12 @@ class CIAgent:
 
         self.total_visitors = 0
         self.total_violations = 0
+        self.guide_duration = 0
 
         self.logger = get_logger(log_file_path="/home/nachiketa/dup_auto_ass1/src/data/events.log")
+
+        # FileLock for JSON operations
+        self._json_lock = FileLock("/home/nachiketa/dup_auto_ass1/src/data/positions.json")
 
         # Tools for navigation
         self.navigate_to_building_tool = NavigateToBuildingTool(publisher)
@@ -92,20 +99,41 @@ class CIAgent:
             'navigation_path': None
         }
         
+        start = time.time()
+
         result1 = tasks[0].execute(inputs=inputs)
         
         if result1 == False:
             self.logger.info(f"Returning to base")
+
+            with self._json_lock:
+                write_pos_to_json(self.agent_id, 'Campus Entrance', None)
+                write_pos_to_json(visitor_id, 'Campus Entrance', None)
+
+                time.sleep(2)
+
+                write_pos_to_json(self.agent_id, 'CI Lobby', None)
+                write_pos_to_json(visitor_id, 'VI Lobby', None)
         
         else:
             inputs['navigation_path'] = result1
             result2 = tasks[1].execute(inputs=inputs)
             
         self.set_available()
-        self.logger.info(f"{self.agent_id} is set to available")
+        self.logger.info(f"{self.agent_id} is available. Status {self.agent_id}: {self.is_available()}")
+
+        end = time.time()
+
+        total_duration = end - start
+
+        if total_duration > self.guide_duration:
+            self.total_violations += 1
+            self.logger.info(f"{self.agent_id} took more than expected time. Total Violations: {self.total_violations}")
+
+        self.logger.info(f"{self.agent_id} Total Visitos Guided: {self.total_visitors} Total Violations: {self.total_violations}")
 
         vi_msg = String()
         vi_msg.data = visitor_id
         self.vi_indicator.publish(vi_msg)
 
-        self.logger.info(f"{visitor_id} is indicated by {self.agent_id}")
+        self.logger.info(f"{visitor_id} is back at VI Lobby")

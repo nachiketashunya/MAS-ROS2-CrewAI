@@ -1,10 +1,10 @@
 {
     "agents": {
-        "ci_agent_1": {
+        "ci_agent_3": {
             "position": "CI Lobby",
             "navigation_path": []
         },
-        "vi_agent_4": {
+        "vi_agent_5": {
             "position": "VI Lobby",
             "navigation_path": []
         }

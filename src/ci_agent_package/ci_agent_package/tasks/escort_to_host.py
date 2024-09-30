@@ -20,13 +20,13 @@ class EscortToHostTask(Task):
         self.agent.tools[0].run(agent_id, visitor_id, building_id)
 
         # Phase 2: Request navigation from BI agent
-        bi_response = self.agent.tools[1].run(agent_id, visitor_id, building_id, room)
+        bi_response = self.agent.tools[1].run(agent_id, visitor_id, building_id, room, meeting_time)
         
-        if bi_response in ['Unauthorized', 'Unavailable', 'OOS']:
+        if bi_response in ['Unauthorized', 'Unavailable', 'OOS', 'Timed Out']:
             return False
 
         # Phase 3: Guide to host
-        self.agent.tools[2].run(agent_id, visitor_id, building_id, bi_response)
+        self.agent.tools[2].run(agent_id, visitor_id, building_id, host, bi_response)
 
         return bi_response
 

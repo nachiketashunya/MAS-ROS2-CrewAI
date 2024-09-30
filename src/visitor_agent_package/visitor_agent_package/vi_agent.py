@@ -8,6 +8,7 @@ class VIAgent:
         self.room = room
         self.meeting_time = meeting_time
         self.is_ci_assgnd = False
+        self.req_count = 0
 
         # Initialize the agent in CrewAI
         self.agent = Agent(

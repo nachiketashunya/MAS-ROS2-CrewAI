@@ -7,6 +7,11 @@ class BIAgent:
         self.is_oos = False
         self.tools = [FetchNavigationTool()]
 
+        self.total_cis = 0
+        self.total_violations = 0
+
+        self.oos_duration = 0
+
         # Initialize the agent in CrewAI
         self.agent = Agent(
             role='Building Incharge',
