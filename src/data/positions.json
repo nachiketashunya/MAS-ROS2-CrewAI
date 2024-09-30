@@ -1,12 +1,60 @@
 {
     "agents": {
+        "ci_agent_1": {
+            "position": "CI Lobby",
+            "next_position": "CI Lobby"
+        },
+        "ci_agent_2": {
+            "position": "CI Lobby",
+            "next_position": "Room A2"
+        },
         "ci_agent_3": {
             "position": "CI Lobby",
-            "navigation_path": []
+            "next_position": "CI Lobby"
+        },
+        "vi_agent_1": {
+            "position": "VI Lobby",
+            "next_position": "Room A2"
+        },
+        "vi_agent_2": {
+            "position": "VI Lobby",
+            "next_position": "VI Lobby"
+        },
+        "vi_agent_3": {
+            "position": "VI Lobby",
+            "next_position": "VI Lobby"
+        },
+        "vi_agent_4": {
+            "position": "VI Lobby",
+            "next_position": "VI Lobby"
         },
         "vi_agent_5": {
             "position": "VI Lobby",
-            "navigation_path": []
+            "next_position": "VI Lobby"
+        },
+        "vi_agent_6": {
+            "position": "VI Lobby",
+            "next_position": "VI Lobby"
+        },
+        "vi_agent_7": {
+            "position": "VI Lobby",
+            "next_position": "VI Lobby"
+        },
+        "bi_agent_A": {
+            "position": "Building A Entrance",
+            "next_position": "Building A Entrance"
+        },
+        "bi_agent_B": {
+            "position": "Building B Entrance",
+            "next_position": "Building B Entrance"
+        },
+        "bi_agent_C": {
+            "position": "Building C Entrance",
+            "next_position": "Building C Entrance"
+        },
+        "bi_agent_D": {
+            "position": "Building D Entrance",
+            "next_position": "Building D Entrance"
         }
     }
 }

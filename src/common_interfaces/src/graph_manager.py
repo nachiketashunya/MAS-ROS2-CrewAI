@@ -9,19 +9,13 @@ import time
 import json
 import os
 import random
+import math
 from watchdog.observers import Observer
 import numpy as np
 from watchdog.events import FileSystemEventHandler
 from math import cos, sin
 from collections import defaultdict
-
-class JSONFileHandler(FileSystemEventHandler):
-    def __init__(self, callback):
-        self.callback = callback
-
-    def on_modified(self, event):
-        if not event.is_directory and event.src_path.endswith("positions.json"):
-            self.callback()
+from collections import deque
 
 class GraphManager:
     def __init__(self):
@@ -30,16 +24,14 @@ class GraphManager:
         self.app = dash.Dash(__name__)
         self.lock = threading.Lock()
         self.setup_dash_layout()
-        self.json_file = "/home/nachiketa/dup_auto_ass1/src/data/positions.json"  # Update this path as needed
-        self.last_modified_time = 0
 
-        self.agent_base_sizes = {
-            'ci': 40,
+        self.agent_movements = {}
+        self.agent_sizes = {
+            'ci': 30,
             'vi': 26,
             'bi': 18
         }
 
-        # Define agents with positions and symbols
         self.agents = {
             'ci_agent_1': {'pos': 'CI Lobby', 'color': 'red', 'symbol': 'star'},
             'ci_agent_2': {'pos': 'CI Lobby', 'color': 'red', 'symbol': 'star'},
@@ -57,8 +49,52 @@ class GraphManager:
             'bi_agent_D': {'pos': 'Building D Entrance', 'color': 'cyan', 'symbol': 'circle'}
         }
 
-        self.setup_file_watcher()
+        self.position_buffers = {agent: deque(maxlen=10) for agent in self.agents}
+        self.update_interval = 0.1  # seconds
+        self.lobby_positions = {
+            'CI Lobby': self.generate_lobby_positions(9),
+            'VI Lobby': self.generate_lobby_positions(12)
+        }
 
+        self.lobby_radius = 0.5  # Radius of the lobby area
+        self.agent_movement_interval = 2.0  # Time between movements in seconds
+        self.agent_last_moved = {agent: 0 for agent in self.agents}
+
+        # Initialize agent_movements with initial positions
+        for agent_id, agent_data in self.agents.items():
+            self.agent_movements[agent_id] = {
+                'current': agent_data['pos'],
+                'next': agent_data['pos'],
+                'start_time': time.time(),
+                'completed': True
+            }
+
+    def update_agent_position(self, agent_id, new_position):
+        with self.lock:
+            if agent_id in self.agents:
+                current_pos = self.agents[agent_id]['pos']
+                self.agents[agent_id]['pos'] = new_position
+                self.agent_movements[agent_id] = {
+                    'current': current_pos,
+                    'next': new_position,
+                    'start_time': time.time(),
+                    'completed': False
+                }
+                print(f"Updated position for {agent_id}: {new_position}")
+            else:
+                print(f"Agent {agent_id} not found.")
+
+
+    def generate_lobby_positions(self, num_positions):
+        base_x, base_y = self.pos['CI Lobby'] if 'CI Lobby' in self.pos else self.pos['VI Lobby']
+        positions = []
+        for i in range(num_positions):
+            angle = 2 * math.pi * i / num_positions
+            x = base_x + 0.5 * math.cos(angle)
+            y = base_y + 0.5 * math.sin(angle)
+            positions.append((x, y))
+        return positions
+    
     def create_campus_graph(self):
         campus_graph = nx.Graph()
         campus_graph.add_node('Campus Entrance', type='entrance')
@@ -119,6 +155,26 @@ class GraphManager:
         pos['Building D Entrance'] = (5, -5)
         pos['Room D1'] = (6, -6)
         pos['Room D2'] = (4, -4)
+        
+
+        # List of all dictionaries containing 'Jn' annotations
+        annotations = [
+            dict(x=-7, y=0),
+            dict(x=-5, y=0),
+            dict(x=5, y=0),
+            dict(x=-4, y=-5),
+            dict(x=-6, y=-5),
+            dict(x=-4, y=5),
+            dict(x=-6, y=5),
+            dict(x=4, y=5),
+            dict(x=6, y=5),
+            dict(x=6, y=-5),
+            dict(x=4, y=-5),
+        ]
+
+        # Creating a dictionary with 'jn' keys and their corresponding coordinates
+        for i, item in enumerate(annotations):
+            pos[f"jn{i+1}"] = (item["x"], item["y"])
         
         return pos
 
@@ -198,6 +254,105 @@ class GraphManager:
                     text="CI Lobby",
                     showarrow=False,
                     font=dict(size=16, color="black"),
+                    bgcolor="white",
+                    opacity=0.8
+                ),
+                dict(
+                    x=-7, y=0,
+                    xref="x", yref="y",
+                    text="Jn1",
+                    showarrow=False,
+                    font=dict(size=10, color="black"),
+                    bgcolor="white",
+                    opacity=0.8
+                ),
+                dict(
+                    x=-5, y=0,
+                    xref="x", yref="y",
+                    text="Jn2",
+                    showarrow=False,
+                    font=dict(size=10, color="black"),
+                    bgcolor="white",
+                    opacity=0.8
+                ),
+                dict(
+                    x=5, y=0,
+                    xref="x", yref="y",
+                    text="Jn3",
+                    showarrow=False,
+                    font=dict(size=10, color="black"),
+                    bgcolor="white",
+                    opacity=0.8
+                ),
+                dict(
+                    x=-4, y=-5,
+                    xref="x", yref="y",
+                    text="Jn4",
+                    showarrow=False,
+                    font=dict(size=10, color="black"),
+                    bgcolor="white",
+                    opacity=0.8
+                ),
+                dict(
+                    x=-6, y=-5,
+                    xref="x", yref="y",
+                    text="Jn5",
+                    showarrow=False,
+                    font=dict(size=10, color="black"),
+                    bgcolor="white",
+                    opacity=0.8
+                ),
+                dict(
+                    x=-4, y=5,
+                    xref="x", yref="y",
+                    text="Jn6",
+                    showarrow=False,
+                    font=dict(size=10, color="black"),
+                    bgcolor="white",
+                    opacity=0.8
+                ),
+                dict(
+                    x=-6, y=5,
+                    xref="x", yref="y",
+                    text="Jn7",
+                    showarrow=False,
+                    font=dict(size=10, color="black"),
+                    bgcolor="white",
+                    opacity=0.8
+                ),
+                dict(
+                    x=4, y=5,
+                    xref="x", yref="y",
+                    text="Jn8",
+                    showarrow=False,
+                    font=dict(size=10, color="black"),
+                    bgcolor="white",
+                    opacity=0.8
+                ),
+                dict(
+                    x=6, y=5,
+                    xref="x", yref="y",
+                    text="Jn9",
+                    showarrow=False,
+                    font=dict(size=10, color="black"),
+                    bgcolor="white",
+                    opacity=0.8
+                ),
+                dict(
+                    x=6, y=-5,
+                    xref="x", yref="y",
+                    text="Jn10",
+                    showarrow=False,
+                    font=dict(size=10, color="black"),
+                    bgcolor="white",
+                    opacity=0.8
+                ),
+                dict(
+                    x=4, y=-5,
+                    xref="x", yref="y",
+                    text="Jn11",
+                    showarrow=False,
+                    font=dict(size=10, color="black"),
                     bgcolor="white",
                     opacity=0.8
                 ),
@@ -310,48 +465,6 @@ class GraphManager:
         
         return shapes
 
-    def get_agent_traces(self):
-        agent_traces = []
-        position_counts = defaultdict(int)
-        
-        # First, count how many agents are at each position
-        for agent, info in self.agents.items():
-            position_counts[info['pos']] += 1
-        
-        for agent, info in self.agents.items():
-            if info['pos'] in ['CI Lobby', 'VI Lobby']:
-                # Randomly position agents within the lobby
-                base_x, base_y = self.pos[info['pos']]
-                x = base_x + (random.random() - 0.5)
-                y = base_y + (random.random() - 0.5)
-            else:
-                x, y = self.pos[info['pos']]
-            
-            # Determine the agent type (ci, vi, or bi)
-            agent_type = agent.split('_')[0]
-            
-            # Calculate size based on the number of agents at this position
-            base_size = self.agent_base_sizes.get(agent_type, 10)
-            size_factor = 1 / (position_counts[info['pos']] ** 0.5)  # Square root scaling
-            adjusted_size = max(base_size * size_factor, 5)  # Ensure minimum size of 5
-            
-            agent_trace = go.Scatter(
-                x=[x], y=[y],
-                mode='markers',
-                marker=dict(
-                    symbol=info['symbol'],
-                    size=adjusted_size,
-                    color=info['color'],
-                    line=dict(width=2, color='DarkSlateGrey')
-                ),
-                name=agent,
-                text=agent,
-                hoverinfo='text'
-            )
-            agent_traces.append(agent_trace)
-        
-        return agent_traces
-    
     def get_node_trace(self):
         # Use the exact order of nodes in self.campus_graph to ensure alignment
         node_x = []
@@ -403,12 +516,107 @@ class GraphManager:
         
         return node_trace
 
+
+    def interpolate_position(self, start_pos, end_pos, progress):
+        start_x, start_y = self.pos[start_pos]
+        end_x, end_y = self.pos[end_pos]
+        
+        if abs(end_x - start_x) > abs(end_y - start_y):
+            # Move horizontally first, then vertically
+            if progress < 0.5:
+                x = start_x + (end_x - start_x) * (progress * 2)
+                y = start_y
+            else:
+                x = end_x
+                y = start_y + (end_y - start_y) * ((progress - 0.5) * 2)
+        else:
+            # Move vertically first, then horizontally
+            if progress < 0.5:
+                x = start_x
+                y = start_y + (end_y - start_y) * (progress * 2)
+            else:
+                x = start_x + (end_x - start_x) * ((progress - 0.5) * 2)
+                y = end_y
+        
+        return x, y
+
+    def get_lobby_position(self, agent_id, lobby):
+        agent_type = agent_id.split('_')[0]
+        base_x, base_y = self.pos[lobby]
+        
+        current_time = time.time()
+        if current_time - self.agent_last_moved[agent_id] > self.agent_movement_interval:
+            # Generate a new random position within the lobby
+            angle = random.uniform(0, 2 * math.pi)
+            radius = random.uniform(0, self.lobby_radius)
+            x = base_x + radius * math.cos(angle)
+            y = base_y + radius * math.sin(angle)
+            self.agent_last_moved[agent_id] = current_time
+        else:
+            # Use the existing position from the buffer
+            x, y = self.position_buffers[agent_id][-1] if self.position_buffers[agent_id] else (base_x, base_y)
+        
+        self.position_buffers[agent_id].append((x, y))
+        return x, y
+
+    def get_agent_traces(self):
+        agent_traces = []
+        current_time = time.time()
+        
+        with self.lock:
+            for agent, agent_data in self.agents.items():
+                movement = self.agent_movements[agent]
+                if movement['completed']:
+                    if movement['next'] in ['CI Lobby', 'VI Lobby']:
+                        x, y = self.get_lobby_position(agent, movement['next'])
+                    else:
+                        x, y = self.pos[movement['next']]
+                else:
+                    start_pos = movement['current']
+                    end_pos = movement['next']
+                    start_time = movement['start_time']
+                    duration = 5.0  # Assume it takes 5 seconds to move between nodes
+                    progress = min(1.0, (current_time - start_time) / duration)
+                    
+                    if start_pos in ['CI Lobby', 'VI Lobby']:
+                        x, y = self.get_lobby_position(agent, start_pos)
+                    elif end_pos in ['CI Lobby', 'VI Lobby']:
+                        if progress == 1.0:
+                            x, y = self.get_lobby_position(agent, end_pos)
+                        else:
+                            x, y = self.interpolate_position(start_pos, end_pos, progress)
+                    else:
+                        x, y = self.interpolate_position(start_pos, end_pos, progress)
+                    
+                    if progress == 1.0:
+                        movement['completed'] = True
+                
+                agent_type = agent.split('_')[0]
+                size = self.agent_sizes[agent_type]
+                
+                agent_trace = go.Scatter(
+                    x=[x], y=[y],
+                    mode='markers',
+                    marker=dict(
+                        symbol=agent_data['symbol'],
+                        size=size,
+                        color=agent_data['color'],
+                        line=dict(width=2, color='DarkSlateGrey')
+                    ),
+                    name=agent,
+                    text=agent,
+                    hoverinfo='text'
+                )
+                agent_traces.append(agent_trace)
+        
+        return agent_traces
+
     def setup_dash_layout(self):
         self.app.layout = html.Div([
-            dcc.Graph(id='live-graph', animate=False),
+            dcc.Graph(id='live-graph', animate=True),
             dcc.Interval(
                 id='interval-component',
-                interval=1000,  # in milliseconds
+                interval=int(1000),  # in milliseconds
                 n_intervals=0
             )
         ])
@@ -417,54 +625,10 @@ class GraphManager:
         def update_graph_live(n):
             return self.create_figure()
 
-    def read_pos_from_json(self):
-        try:
-            current_modified_time = os.path.getmtime(self.json_file)
-            if current_modified_time > self.last_modified_time:
-                with open(self.json_file, "r") as f:
-                    data = json.load(f)
-
-                with self.lock:
-                    agents_data = data.get('agents', {})
-                    for agent_id, agent_data in agents_data.items():
-                        if agent_id in self.agents:
-                            self.agents[agent_id]['pos'] = agent_data.get('position', self.agents[agent_id]['pos'])
-
-                self.last_modified_time = current_modified_time
-                print(f"Updated positions: {self.agents}")
-
-        except FileNotFoundError:
-            print(f"Error: {self.json_file} not found.")
-        except Exception as e:
-            print(f"Error reading from JSON file: {e}")
-
-    def setup_file_watcher(self):
-        event_handler = JSONFileHandler(self.read_pos_from_json)
-        observer = Observer()
-        observer.schedule(event_handler, path=os.path.dirname(self.json_file), recursive=False)
-        observer.start()
-
     def run(self):
         print("Starting Dash server...")
         self.app.run_server(debug=False, use_reloader=False)
 
 if __name__ == "__main__":
     manager = GraphManager()
-    # Load the existing JSON file content
-    json_file_path = manager.json_file
-
-    with open(json_file_path, 'r') as f:
-        data = json.load(f)
-
-    # Update the positions in the JSON file using the new agent data
-    for agent_id, agent_data in manager.agents.items():
-        if agent_id in data['agents']:
-            data['agents'][agent_id]['position'] = agent_data['pos']
-
-    # Write the updated content back to the JSON file
-    with open(json_file_path, 'w') as f:
-        json.dump(data, f, indent=4)
-
-    print("JSON file updated successfully.")
-
     manager.run()

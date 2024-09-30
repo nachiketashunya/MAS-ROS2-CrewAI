@@ -22,11 +22,12 @@ class EscortToEntranceTask(Task):
         navigation_path = inputs['navigation_path']
         agent_id = inputs['agent_id']
         meeting_time = inputs['meeting_time']
+        graph_manager = inputs['graph_manager']
 
         self._logger.info(f"{agent_id} is waiting for meeting to finish")
         time.sleep(int(meeting_time))
 
         # Phase 1: Guide visitor back to the building entrance
-        self.agent.tools[3].run(agent_id, visitor_id, building_id, navigation_path)
+        self.agent.tools[3].run(agent_id, visitor_id, building_id, navigation_path, graph_manager)
 
         return True

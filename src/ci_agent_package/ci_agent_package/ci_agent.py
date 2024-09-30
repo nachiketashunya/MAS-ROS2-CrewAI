@@ -18,13 +18,15 @@ import time
 
 
 class CIAgent:
-    def __init__(self, publisher, subscriber, agent_id, vi_indicator, callback_group):
+    def __init__(self, publisher, subscriber, agent_id, vi_indicator, graph_manager, callback_group):
         # Initialize the tools
         self.publisher = publisher
         self.subscriber = subscriber
         self.agent_id = agent_id
         self.vi_indicator = vi_indicator
         self.available = True
+
+        self.graph_manager = graph_manager
 
         self.total_visitors = 0
         self.total_violations = 0
@@ -96,7 +98,8 @@ class CIAgent:
             'room': room, 
             'host': host,
             'meeting_time': meeting_time, 
-            'navigation_path': None
+            'navigation_path': None,
+            'graph_manager': self.graph_manager
         }
         
         start = time.time()
@@ -106,14 +109,20 @@ class CIAgent:
         if result1 == False:
             self.logger.info(f"Returning to base")
 
-            with self._json_lock:
-                write_pos_to_json(self.agent_id, 'Campus Entrance', None)
-                write_pos_to_json(visitor_id, 'Campus Entrance', None)
-
-                time.sleep(2)
-
-                write_pos_to_json(self.agent_id, 'CI Lobby', None)
-                write_pos_to_json(visitor_id, 'VI Lobby', None)
+            campus_info = "/home/nachiketa/dup_auto_ass1/src/data/campus_info.json"
+            with open(campus_info, "r") as f:
+                data = json.load(f)
+           
+       
+            for path in reversed(data['buildings'][building]):
+                # Update the information
+                self.graph_manager.update_agent_position(self.agent_id, path)
+                self.graph_manager.update_agent_position(visitor_id, path)
+                time.sleep(1)
+            
+            self.graph_manager.update_agent_position(self.agent_id, 'CI Lobby')
+            self.graph_manager.update_agent_position(visitor_id, 'VI Lobby')        
+            time.sleep(10)
         
         else:
             inputs['navigation_path'] = result1

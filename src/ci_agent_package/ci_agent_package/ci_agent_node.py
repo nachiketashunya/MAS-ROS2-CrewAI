@@ -13,10 +13,17 @@ import sys
 sys.path.append("/home/nachiketa/dup_auto_ass1/src")
 from common_interfaces.src.logger_config import get_logger
 from common_interfaces.src.update_json import write_pos_to_json
+from common_interfaces.src.graph_manager import GraphManager
 
 class CIAgentNode(Node):
     def __init__(self):
         super().__init__('ci_agent_node')
+
+        self.manager = GraphManager()
+
+        # Start the Dash server in a separate thread
+        dash_thread = threading.Thread(target=self.manager.run)
+        dash_thread.start()
 
         self.logger = get_logger(log_file_path="/home/nachiketa/dup_auto_ass1/src/data/events.log")
         self.ci_agents = []
@@ -39,6 +46,7 @@ class CIAgentNode(Node):
                 publisher=publisher,
                 subscriber=subscriber,
                 vi_indicator=vi_indicator,
+                graph_manager=self.manager,
                 agent_id=f"ci_agent_{i+1}",
                 callback_group=agent_callback_group
             )
@@ -116,7 +124,7 @@ class CIAgentNode(Node):
                         self.logger.info(f"BI Agent is Out of Service! Returning to base")
                         bi_response = "OOS"
                     else:
-                        path = response[2:].copy()
+                        path = response[4:].copy()
                         self.logger.info(f"{ci_agent.agent_id} received navigation response")
                         bi_response = "->".join(path)
 
@@ -124,26 +132,31 @@ class CIAgentNode(Node):
                     self.bi_response_received.set()
 
                     # Update position in JSON file
-                    self.update_positions(ci_agent.agent_id, response[2], bi_response)
+                    self.update_positions(ci_agent.agent_id, response[2], bi_response, response)
 
                     # Mark this response as processed
                     self.last_processed_response[response_key] = time.time()
 
-    def update_positions(self, ci_agent_id, visitor_id, bi_response):
-        with self.json_lock:
-            if bi_response in ["Unauthorized", "Unavailable", "OOS"]:
-                write_pos_to_json(ci_agent_id, 'Campus Entrance', None)
-                write_pos_to_json(visitor_id, 'Campus Entrance', None)
+    def update_positions(self, ci_agent_id, visitor_id, bi_response, response):
+        campus_info = "/home/nachiketa/dup_auto_ass1/src/data/campus_info.json"
+        with open(campus_info, "r") as f:
+            data = json.load(f)
+
+        if bi_response in ["Unauthorized", "Unavailable", "OOS"]:
+            for path in reversed(data['buildings'][response[3]]):
+                self.manager.update_agent_position(ci_agent_id, path)
+                self.manager.update_agent_position(visitor_id, path)
                 time.sleep(2)
-                write_pos_to_json(ci_agent_id, 'CI Lobby', None)
-                write_pos_to_json(visitor_id, 'VI Lobby', None)
-            else:
-                # Update positions based on the navigation path
-                path = bi_response.split('->')
-                for position in path:
-                    write_pos_to_json(ci_agent_id, position, None)
-                    write_pos_to_json(visitor_id, position, None)
-                    time.sleep(2)
+        
+            self.manager.update_agent_position(ci_agent_id, "CI Lobby")
+            self.manager.update_agent_position(visitor_id,"VI Lobby")
+            # else:
+            #     # Update positions based on the navigation path
+            #     path = bi_response.split('->')
+            #     for position in path:
+            #         write_pos_to_json(ci_agent_id, position, None)
+            #         write_pos_to_json(visitor_id, position, None)
+            #         time.sleep(2)
 
     def avail_ci_agent(self):
         for ci_agent in self.ci_agents:

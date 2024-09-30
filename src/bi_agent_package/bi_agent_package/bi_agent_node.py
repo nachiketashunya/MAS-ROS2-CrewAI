@@ -72,6 +72,7 @@ class BIAgentNode(Node):
             path.insert(0, "All OK")
             path.insert(1, ci_agent_id)
             path.insert(2, visitor_id)
+            path.insert(3, building_id)
 
             # Format and send the response back to the CI agent
             ret_path = "->".join(path)
@@ -88,13 +89,13 @@ class BIAgentNode(Node):
 
         else:
             if bi_agent.is_oos:
-                self.send_navigation_response(f"OOS->{ci_agent_id}->{visitor_id}")
+                self.send_navigation_response(f"OOS->{ci_agent_id}->{visitor_id}->{building_id}")
 
             elif visitor_id not in info['authorized']:
-                self.send_navigation_response(f"Unauthorized->{ci_agent_id}->{visitor_id}")
+                self.send_navigation_response(f"Unauthorized->{ci_agent_id}->{visitor_id}->{building_id}")
             
             elif info['available'] == "False":
-                self.send_navigation_response(f"Unavailable->{ci_agent_id}->{visitor_id}")
+                self.send_navigation_response(f"Unavailable->{ci_agent_id}->{visitor_id}->{building_id}")
             else:
                 # Fetch the navigation path using BI agent tools
                 path = info['path']
@@ -102,6 +103,7 @@ class BIAgentNode(Node):
                 path.insert(0, "All OK")
                 path.insert(1, ci_agent_id)
                 path.insert(2, visitor_id)
+                path.insert(3, building_id)
 
                 # Format and send the response back to the CI agent
                 ret_path = "->".join(path)

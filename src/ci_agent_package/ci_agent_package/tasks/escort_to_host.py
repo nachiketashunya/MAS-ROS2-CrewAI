@@ -15,9 +15,10 @@ class EscortToHostTask(Task):
         room = inputs['room']
         meeting_time = inputs['meeting_time']
         host = inputs['host']
+        graph_manager = inputs['graph_manager']
         
         # Phase 1: Guide to building entrance
-        self.agent.tools[0].run(agent_id, visitor_id, building_id)
+        self.agent.tools[0].run(agent_id, visitor_id, building_id, graph_manager)
 
         # Phase 2: Request navigation from BI agent
         bi_response = self.agent.tools[1].run(agent_id, visitor_id, building_id, room, meeting_time)
@@ -26,7 +27,7 @@ class EscortToHostTask(Task):
             return False
 
         # Phase 3: Guide to host
-        self.agent.tools[2].run(agent_id, visitor_id, building_id, host, bi_response)
+        self.agent.tools[2].run(agent_id, visitor_id, building_id, host, bi_response, graph_manager)
 
         return bi_response
 

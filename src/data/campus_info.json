@@ -1,0 +1,9 @@
+{
+  "buildings": {
+    "Building A Entrance": ["jn1", "jn2", "Building A Entrance"],
+    "Building B Entrance": ["jn1", "jn2", "jn3", "Building B Entrance"],
+    "Building C Entrance": ["jn1", "jn2", "Building C Entrance"],
+    "Building D Entrance": ["jn1", "jn2", "jn3", "Building D Entrance"]
+  }
+}
+  
