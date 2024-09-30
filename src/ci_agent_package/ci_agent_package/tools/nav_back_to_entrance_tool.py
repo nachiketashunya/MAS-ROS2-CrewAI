@@ -8,6 +8,7 @@ from common_interfaces.src.update_json import write_pos_to_json
 from common_interfaces.src.logger_config import get_logger
 
 from filelock import FileLock
+import threading
 
 class NavigateBackToEntranceTool(BaseTool):
     name: str = "Navigate Back to Entrance Tool"
@@ -23,22 +24,24 @@ class NavigateBackToEntranceTool(BaseTool):
         with open(campus_info, "r") as f:
             data = json.load(f)
            
-        if navigation_path is not None:
-            path_list = navigation_path.split("->")
-            for path in reversed(path_list):
+        lock = threading.Lock()
+
+        with lock:
+            if navigation_path is not None:
+                path_list = navigation_path.split("->")
+                for path in reversed(path_list):
+                    graph_manager.update_agent_position(agent_id, path)
+                    graph_manager.update_agent_position(visitor_id, path)
+                    time.sleep(1)
+        
+            for path in reversed(data['buildings'][building_id]):
+                # Update the information
                 graph_manager.update_agent_position(agent_id, path)
                 graph_manager.update_agent_position(visitor_id, path)
                 time.sleep(1)
-       
-        for path in reversed(data['buildings'][building_id]):
-            # Update the information
-            graph_manager.update_agent_position(agent_id, path)
-            graph_manager.update_agent_position(visitor_id, path)
-            time.sleep(1)
            
 
-        graph_manager.update_agent_position(agent_id, 'CI Lobby')
-        graph_manager.update_agent_position(visitor_id, 'VI Lobby')        
-        time.sleep(10)
+            graph_manager.update_agent_position(agent_id, 'CI Lobby')
+            graph_manager.update_agent_position(visitor_id, 'VI Lobby')        
 
         logger.info(f"{agent_id} is back at the Campus Entrance")

@@ -45,6 +45,18 @@ class BIAgentNode(Node):
             10
         )
 
+        self.terminate_subscriber = self.create_subscription(String, 'termination', self.handle_termination, 10)
+
+    def handle_termination(self, msg):
+        msg = msg.data
+
+        self.logger.info(f'Shutdown signal received. Shutting Down CI Node')
+        
+        for bi_agent in self.bi_agents:
+            self.logger.info(f'{bi_agent.agent_id} Total Visitors: {bi_agent.total_cis} Total Violations: {bi_agent.total_violations}')
+        
+        rclpy.shutdown()  # Shuts down the ROS 2 system
+
     def handle_navigation_request(self, msg):
         """
         Handle navigation requests from CI agents.

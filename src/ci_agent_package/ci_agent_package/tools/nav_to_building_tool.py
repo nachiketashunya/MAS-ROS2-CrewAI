@@ -26,9 +26,12 @@ class NavigateToBuildingTool(BaseTool):
 
         self._logger.info(f"{agent_id} is navigating to {building_id} with {visitor_id}")
 
-       
-        for path in data['buildings'][building_id]:
-            # Update the information
-            graph_manager.update_agent_position(agent_id, path)
-            graph_manager.update_agent_position(visitor_id, path)
-            time.sleep(1)
+        import threading
+        lock = threading.Lock()
+
+        with lock:
+            for path in data['buildings'][building_id]:
+                # Update the information
+                graph_manager.update_agent_position(agent_id, path)
+                graph_manager.update_agent_position(visitor_id, path)
+                time.sleep(1)

@@ -13,9 +13,9 @@ from common_interfaces.src.logger_config import get_logger
 
 from std_msgs.msg import String
 from filelock import FileLock
-
+import json
 import time
-
+import threading
 
 class CIAgent:
     def __init__(self, publisher, subscriber, agent_id, vi_indicator, graph_manager, callback_group):
@@ -27,6 +27,8 @@ class CIAgent:
         self.available = True
 
         self.graph_manager = graph_manager
+
+        self.lock = threading.Lock()
 
         self.total_visitors = 0
         self.total_violations = 0
@@ -112,17 +114,16 @@ class CIAgent:
             campus_info = "/home/nachiketa/dup_auto_ass1/src/data/campus_info.json"
             with open(campus_info, "r") as f:
                 data = json.load(f)
-           
-       
-            for path in reversed(data['buildings'][building]):
-                # Update the information
-                self.graph_manager.update_agent_position(self.agent_id, path)
-                self.graph_manager.update_agent_position(visitor_id, path)
-                time.sleep(1)
-            
-            self.graph_manager.update_agent_position(self.agent_id, 'CI Lobby')
-            self.graph_manager.update_agent_position(visitor_id, 'VI Lobby')        
-            time.sleep(10)
+
+            with self.lock:
+                for path in reversed(data['buildings'][building]):
+                    # Update the information
+                    self.graph_manager.update_agent_position(self.agent_id, path)
+                    self.graph_manager.update_agent_position(visitor_id, path)
+                    time.sleep(1)
+                
+                self.graph_manager.update_agent_position(self.agent_id, 'CI Lobby')
+                self.graph_manager.update_agent_position(visitor_id, 'VI Lobby')        
         
         else:
             inputs['navigation_path'] = result1

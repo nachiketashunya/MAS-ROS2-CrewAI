@@ -27,10 +27,14 @@ class NavigateToHostTool(BaseTool):
             data = json.load(f)
 
         path_list = navigation_path.split("->")
-        for path in path_list:
-            # Update the information
-            graph_manager.update_agent_position(agent_id, path)
-            graph_manager.update_agent_position(visitor_id, path)
-            time.sleep(1)
+
+        import threading
+        lock = threading.Lock()
+        with lock:
+            for path in path_list:
+                # Update the information
+                graph_manager.update_agent_position(agent_id, path)
+                graph_manager.update_agent_position(visitor_id, path)
+                time.sleep(1)
 
         logger.info(f"{visitor_id} successfully guided to the {host}")

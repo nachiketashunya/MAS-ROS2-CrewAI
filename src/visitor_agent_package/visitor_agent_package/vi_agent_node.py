@@ -26,6 +26,8 @@ class VIAgentNode(Node):
             self.callback_groups.append(agent_callback_group)
 
         self.request_publisher = self.create_publisher(String, 'vi_to_ci_request', 10)
+
+        self.terminate_publisher = self.create_publisher(String, 'termination', 10)
         
         # Use MutuallyExclusiveCallbackGroup for subscriptions
         subscription_callback_group = MutuallyExclusiveCallbackGroup()
@@ -83,7 +85,7 @@ class VIAgentNode(Node):
                     vi_agent.meeting_time = random.randint(30, 90)
                     self.get_logger().info(f"{vis_id} has finished meeting and is ready for a new request")
                     
-                    if vi_agent.req_count < 3:
+                    if vi_agent.req_count < 20:
                         self.request_guidance(vi_agent)
                         vi_agent.req_count += 1
 
@@ -115,6 +117,7 @@ class VIAgentNode(Node):
         # time.sleep(20)
 
     def process_vi_agents(self):
+        exceed = set()
         while rclpy.ok():
             with self.lock:
                 available_agents = [agent for agent in self.vi_agents if not agent.is_ci_assgnd]
@@ -122,14 +125,24 @@ class VIAgentNode(Node):
             if available_agents:
                 vi_agent = random.choice(available_agents)
 
-                if vi_agent.req_count < 3:
+                if vi_agent.req_count < 20:
                     self.request_guidance(vi_agent)
                     vi_agent.req_count += 1
                 
                     # Wait until confirmation is received before processing the next agent
                     self.assigned_event.wait()
                     self.assigned_event.clear()
-            
+                else:
+                    exceed.add(vi_agent.agent_id)
+
+            if len(exceed) == len(self.vi_agents):
+                msg = String()
+                msg.data = "No More"
+                self.terminate_publisher.publish(msg)
+
+                rclpy.shutdown()
+                break 
+
             time.sleep(1)  # Add a small delay to prevent tight looping
 
 def main(args=None):

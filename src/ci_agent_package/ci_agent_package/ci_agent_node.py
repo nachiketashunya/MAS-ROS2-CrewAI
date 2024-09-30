@@ -9,21 +9,22 @@ from ci_agent_package.ci_agent import CIAgent
 import time
 from filelock import FileLock
 
+
 import sys
 sys.path.append("/home/nachiketa/dup_auto_ass1/src")
 from common_interfaces.src.logger_config import get_logger
 from common_interfaces.src.update_json import write_pos_to_json
 from common_interfaces.src.graph_manager import GraphManager
 
+import concurrent.futures
+from threading import Lock, Thread
+
 class CIAgentNode(Node):
     def __init__(self):
         super().__init__('ci_agent_node')
 
         self.manager = GraphManager()
-
-        # Start the Dash server in a separate thread
-        dash_thread = threading.Thread(target=self.manager.run)
-        dash_thread.start()
+        self.lock = Lock()
 
         self.logger = get_logger(log_file_path="/home/nachiketa/dup_auto_ass1/src/data/events.log")
         self.ci_agents = []
@@ -57,10 +58,32 @@ class CIAgentNode(Node):
             String, 'ci_to_vi_confirm_res', 10, callback_group=self.main_callback_group)
         self.vis_req_subscriber = self.create_subscription(
             String, 'vi_to_ci_request', self.handle_vis_req, 10, callback_group=self.main_callback_group)
+        
+        self.terminate_subscriber = self.create_subscription(String, 'termination', self.handle_termination, 10, callback_group=self.main_callback_group)
 
         self.bi_response_received = threading.Event()
         self.last_processed_response = {}
         print("CI node Initialization Complete")
+        
+    def start_graph_manager(self):
+        # Create a thread to run the manager
+        manager_thread = threading.Thread(target=self.run_manager)
+        manager_thread.daemon = True  # Optional: set to True if you want the thread to close when the main program exits
+        manager_thread.start()
+
+    def run_manager(self):
+        # Call the manager's run method
+        self.manager.run()
+
+    def handle_termination(self, msg):
+        msg = msg.data
+
+        self.logger.info(f'Shutdown signal received. Shutting Down CI Node')
+        
+        for ci_agent in self.ci_agents:
+            self.logger.info(f'{ci_agent.agent_id} Total Visitors: {ci_agent.total_visitors} Total Violations: {ci_agent.total_violations}')
+        
+        rclpy.shutdown()  # Shuts down the ROS 2 system
 
     def handle_vis_req(self, msg):
         data = msg.data.split("==>")
@@ -143,13 +166,14 @@ class CIAgentNode(Node):
             data = json.load(f)
 
         if bi_response in ["Unauthorized", "Unavailable", "OOS"]:
-            for path in reversed(data['buildings'][response[3]]):
-                self.manager.update_agent_position(ci_agent_id, path)
-                self.manager.update_agent_position(visitor_id, path)
-                time.sleep(2)
-        
-            self.manager.update_agent_position(ci_agent_id, "CI Lobby")
-            self.manager.update_agent_position(visitor_id,"VI Lobby")
+            with self.lock:
+                for path in reversed(data['buildings'][response[3]]):
+                    self.manager.update_agent_position(ci_agent_id, path)
+                    self.manager.update_agent_position(visitor_id, path)
+                    time.sleep(1)
+            
+                self.manager.update_agent_position(ci_agent_id, "CI Lobby")
+                self.manager.update_agent_position(visitor_id,"VI Lobby")
             # else:
             #     # Update positions based on the navigation path
             #     path = bi_response.split('->')
@@ -169,6 +193,8 @@ def main(args=None):
     node = CIAgentNode()
     executor = MultiThreadedExecutor()
     executor.add_node(node)
+
+    node.start_graph_manager()
 
     try:
         executor.spin()

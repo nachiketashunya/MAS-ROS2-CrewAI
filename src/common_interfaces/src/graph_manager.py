@@ -616,7 +616,7 @@ class GraphManager:
             dcc.Graph(id='live-graph', animate=True),
             dcc.Interval(
                 id='interval-component',
-                interval=int(1000),  # in milliseconds
+                interval=int(2000),  # in milliseconds
                 n_intervals=0
             )
         ])
