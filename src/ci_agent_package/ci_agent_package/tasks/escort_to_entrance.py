@@ -6,11 +6,11 @@ sys.path.append("/home/nachiketa/dup_auto_ass1/src")
 from common_interfaces.src.logger_config import get_logger
 
 class EscortToEntranceTask(Task):
-    def __init__(self, agent):
+    def __init__(self, tools):
         super().__init__(
             description='Escort visitor from the host back to the campus entrance.',
             expected_output='Visitor successfully escorted back to the campus entrance.',
-            agent=agent
+            tools=tools
         )
 
         self._logger = get_logger("/home/nachiketa/dup_auto_ass1/src/data/events.log")
@@ -28,6 +28,6 @@ class EscortToEntranceTask(Task):
         time.sleep(int(meeting_time))
 
         # Phase 1: Guide visitor back to the building entrance
-        self.agent.tools[3].run(agent_id, visitor_id, building_id, navigation_path, graph_manager)
+        self.tools[3].run(agent_id, visitor_id, building_id, navigation_path, graph_manager)
 
         return True

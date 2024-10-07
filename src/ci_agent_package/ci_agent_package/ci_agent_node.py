@@ -13,7 +13,6 @@ from filelock import FileLock
 import sys
 sys.path.append("/home/nachiketa/dup_auto_ass1/src")
 from common_interfaces.src.logger_config import get_logger
-from common_interfaces.src.update_json import write_pos_to_json
 from common_interfaces.src.graph_manager import GraphManager
 
 import concurrent.futures

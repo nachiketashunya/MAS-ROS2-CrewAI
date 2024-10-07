@@ -42,7 +42,7 @@ class CIAgent:
         self.navigate_back_to_entrance_tool = NavigateBackToEntranceTool()
 
         # Attach tools to the agent
-        tools = [
+        self.tools = [
             self.navigate_to_building_tool,
             self.request_building_navigation_tool,
             self.navigate_to_host_tool,
@@ -68,8 +68,8 @@ class CIAgent:
         """
         Define tasks such as escorting the visitor to the host and back to the entrance.
         """
-        escort_to_host_task = EscortToHostTask(agent=self.agent)
-        escort_to_entrance_task = EscortToEntranceTask(agent=self.agent)
+        escort_to_host_task = EscortToHostTask(tools=self.tools)
+        escort_to_entrance_task = EscortToEntranceTask(tools=self.tools)
 
         return [escort_to_host_task, escort_to_entrance_task]
 

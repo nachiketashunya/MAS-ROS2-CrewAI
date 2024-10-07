@@ -24,7 +24,7 @@ class BIAgentNode(Node):
         for i in ['A', 'B', 'C', 'D']:
             agent_callback_group = ReentrantCallbackGroup()
 
-            bi_agent = BIAgent(agent_id=f"bi_agent_{i}", callback_group=agent_callback_group)
+            bi_agent = BIAgent(agent_id=f"bi_agent_{i}")
             self.bi_agents.append(bi_agent)
             self.callback_groups.append(agent_callback_group)
 
