@@ -173,13 +173,7 @@ class CIAgentNode(Node):
         
             self.manager.update_agent_position(ci_agent_id, "CI Lobby")
             self.manager.update_agent_position(visitor_id,"VI Lobby")
-            # else:
-            #     # Update positions based on the navigation path
-            #     path = bi_response.split('->')
-            #     for position in path:
-            #         write_pos_to_json(ci_agent_id, position, None)
-            #         write_pos_to_json(visitor_id, position, None)
-            #         time.sleep(2)
+           
 
     def avail_ci_agent(self):
         for ci_agent in self.ci_agents:

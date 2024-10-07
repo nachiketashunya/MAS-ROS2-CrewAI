@@ -1,7 +1,5 @@
 from crewai_tools import BaseTool
-import json
 from std_msgs.msg import String
-import time
 import threading
 import sys
 sys.path.append("/home/nachiketa/dup_auto_ass1/src")

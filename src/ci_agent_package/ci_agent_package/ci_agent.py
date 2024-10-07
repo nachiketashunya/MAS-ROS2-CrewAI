@@ -8,7 +8,6 @@ from ci_agent_package.tasks.escort_to_host import EscortToHostTask
 
 import sys
 sys.path.append("/home/nachiketa/dup_auto_ass1/src")
-from common_interfaces.src.update_json import write_pos_to_json
 from common_interfaces.src.logger_config import get_logger
 
 from std_msgs.msg import String
@@ -36,9 +35,6 @@ class CIAgent:
 
         self.logger = get_logger(log_file_path="/home/nachiketa/dup_auto_ass1/src/data/events.log")
 
-        # FileLock for JSON operations
-        self._json_lock = FileLock("/home/nachiketa/dup_auto_ass1/src/data/positions.json")
-
         # Tools for navigation
         self.navigate_to_building_tool = NavigateToBuildingTool(publisher)
         self.request_building_navigation_tool = RequestBuildingNavigationTool(publisher, subscriber)
@@ -52,16 +48,6 @@ class CIAgent:
             self.navigate_to_host_tool,
             self.navigate_back_to_entrance_tool
         ]
-
-        # Initialize the agent in CrewAI
-        self.agent = Agent(
-            role='Campus Incharge',
-            goal='Escort visitors to the designated building and host',
-            backstory="You're responsible for guiding visitors from the campus entrance to the host and then back to the entrance.",
-            memory=False,
-            verbose=True,
-            tools=tools
-        )
     
     def set_available(self):
         self.available = True
