@@ -166,14 +166,13 @@ class CIAgentNode(Node):
             data = json.load(f)
 
         if bi_response in ["Unauthorized", "Unavailable", "OOS"]:
-            with self.lock:
-                for path in reversed(data['buildings'][response[3]]):
-                    self.manager.update_agent_position(ci_agent_id, path)
-                    self.manager.update_agent_position(visitor_id, path)
-                    time.sleep(1)
-            
-                self.manager.update_agent_position(ci_agent_id, "CI Lobby")
-                self.manager.update_agent_position(visitor_id,"VI Lobby")
+            for path in reversed(data['buildings'][response[3]]):
+                self.manager.update_agent_position(ci_agent_id, path)
+                self.manager.update_agent_position(visitor_id, path)
+                time.sleep(1)
+        
+            self.manager.update_agent_position(ci_agent_id, "CI Lobby")
+            self.manager.update_agent_position(visitor_id,"VI Lobby")
             # else:
             #     # Update positions based on the navigation path
             #     path = bi_response.split('->')

@@ -51,7 +51,7 @@ class VIAgentNode(Node):
         host = random.choice(hosts)
         room = f"Room {host}"
         building = f"Building {host[0]} Entrance"
-        meeting_time = random.randint(60, 180)
+        meeting_time = random.randint(20, 60)
 
         return VIAgent(
             agent_id=f"vi_agent_{i+1}", 
@@ -64,30 +64,30 @@ class VIAgentNode(Node):
 
     def handle_indication(self, msg):
         vis_id = msg.data
-        with self.lock:
-            for vi_agent in self.vi_agents:
-                if vi_agent.agent_id == vis_id:
-                    # vi_agent.is_ci_assgnd = False
-                    # Reset agent for a new meeting
-                    hosts = ['A1', 'A2', 'A3', 'A4', 'B1', 'B2', 'B3', 'C1', 'C2', 'C3', 'C4', 'D1', 'D2']
-                    host = random.choice(hosts)
+        
+        for vi_agent in self.vi_agents:
+            if vi_agent.agent_id == vis_id:
+                # vi_agent.is_ci_assgnd = False
+                # Reset agent for a new meeting
+                hosts = ['A1', 'A2', 'A3', 'A4', 'B1', 'B2', 'B3', 'C1', 'C2', 'C3', 'C4', 'D1', 'D2']
+                host = random.choice(hosts)
+            
+                output = random.choices([0, 1], weights=[70, 30], k=1)[0]
                 
-                    output = random.choices([0, 1], weights=[70, 30], k=1)[0]
-                    
-                    vi_agent.room = f"Room {host}"
-                    vi_agent.host = host
+                vi_agent.room = f"Room {host}"
+                vi_agent.host = host
 
-                    if output == 1:
-                        vi_agent.room = f"Building {host[0]} Entrance"
-                        vi_agent.host = f"bi_agent_{host[0]}"
+                if output == 1:
+                    vi_agent.room = f"Building {host[0]} Entrance"
+                    vi_agent.host = f"bi_agent_{host[0]}"
 
-                    vi_agent.building = f"Building {host[0]} Entrance"
-                    vi_agent.meeting_time = random.randint(30, 90)
-                    self.get_logger().info(f"{vis_id} has finished meeting and is ready for a new request")
-                    
-                    if vi_agent.req_count < 20:
-                        self.request_guidance(vi_agent)
-                        vi_agent.req_count += 1
+                vi_agent.building = f"Building {host[0]} Entrance"
+                vi_agent.meeting_time = random.randint(30, 90)
+                self.get_logger().info(f"{vis_id} has finished meeting and is ready for a new request")
+                
+                if vi_agent.req_count < 20:
+                    self.request_guidance(vi_agent)
+                    vi_agent.req_count += 1
 
 
     def request_guidance(self, visitor):
@@ -102,13 +102,13 @@ class VIAgentNode(Node):
         status, vis_id, ci_id = data[0], data[1], data[2]
         
         if status == "A":
-            with self.lock:
-                for vi_agent in self.vi_agents:
-                    if vi_agent.agent_id == vis_id:
-                        self.get_logger().info(f"{ci_id} is assigned to {vis_id}")
-                        vi_agent.is_ci_assgnd = True
-                        self.assigned_event.set()
-                        break
+            
+            for vi_agent in self.vi_agents:
+                if vi_agent.agent_id == vis_id:
+                    self.get_logger().info(f"{ci_id} is assigned to {vis_id}")
+                    vi_agent.is_ci_assgnd = True
+                    self.assigned_event.set()
+                    break
         else:
             self.get_logger().info(f"Assigned event is reset")
             self.assigned_event.set()
@@ -143,7 +143,7 @@ class VIAgentNode(Node):
                 rclpy.shutdown()
                 break 
 
-            time.sleep(1)  # Add a small delay to prevent tight looping
+            # time.sleep(1)  # Add a small delay to prevent tight looping
 
 def main(args=None):
     rclpy.init(args=args)

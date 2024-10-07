@@ -115,15 +115,15 @@ class CIAgent:
             with open(campus_info, "r") as f:
                 data = json.load(f)
 
-            with self.lock:
-                for path in reversed(data['buildings'][building]):
-                    # Update the information
-                    self.graph_manager.update_agent_position(self.agent_id, path)
-                    self.graph_manager.update_agent_position(visitor_id, path)
-                    time.sleep(1)
-                
-                self.graph_manager.update_agent_position(self.agent_id, 'CI Lobby')
-                self.graph_manager.update_agent_position(visitor_id, 'VI Lobby')        
+            
+            for path in reversed(data['buildings'][building]):
+                # Update the information
+                self.graph_manager.update_agent_position(self.agent_id, path)
+                self.graph_manager.update_agent_position(visitor_id, path)
+                time.sleep(1)
+            
+            self.graph_manager.update_agent_position(self.agent_id, 'CI Lobby')
+            self.graph_manager.update_agent_position(visitor_id, 'VI Lobby')        
         
         else:
             inputs['navigation_path'] = result1
